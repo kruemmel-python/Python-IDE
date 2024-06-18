@@ -43,7 +43,7 @@ Beiträge sind willkommen! Bitte fork das Repository und erstelle einen Pull-Req
 
 ## Lizenz
 
-Dieses Projekt ist unter der MIT-Lizenz lizenziert. Weitere Informationen finden Sie in der [LICENSE](LICENSE).
+Dieses Projekt ist unter der MIT-Lizenz lizenziert. Weitere Informationen finden Sie in der [LICENSE](LICENSE.md).
 
 
 ## Entpacken sie die Pythonversion in ihren Programmordner und das Programm läuft unabhängig von der installierten Pythonversion. Somit ist es portable.
