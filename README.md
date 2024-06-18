@@ -2,6 +2,9 @@
 
 Willkommen zur **Python IDE**, einer benutzerfreundlichen integrierten Entwicklungsumgebung (IDE) für Python. Diese IDE ermöglicht es Ihnen, Python-Code zu schreiben, zu bearbeiten, auszuführen und zu debuggen. Sie unterstützt Syntaxhervorhebung, Code-Vervollständigung, eine TODO-Liste und vieles mehr.
 
+![image](https://github.com/kruemmel-python/Python-IDE/assets/169469747/e7a2be9f-cc84-4c5a-a560-0a80c4049c1c)
+
+
 ## Features
 
 - **Syntaxhervorhebung** für Python-Code.
