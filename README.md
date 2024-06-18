@@ -17,8 +17,8 @@ Willkommen zur **Python IDE**, einer benutzerfreundlichen integrierten Entwicklu
 1. **Clone das Repository:**
 
     ```bash
-    git clone https://github.com/kruemmel-python/Python-IDE/python-ide.git
-    cd python-ide
+    git clone https://github.com/kruemmel-python/Python-IDE
+    cd Python-IDE
     ```
 
 2. **Installiere die Abhängigkeiten:**
