@@ -9,7 +9,7 @@ Sie dürfen die Software für private, nicht-kommerzielle Zwecke verwenden, verv
 
 ## 2. Beschränkungen
 
-1. **Kommerzielle Nutzung:** Sie dürfen die Software oder Teile davon nicht für kommerzielle Zwecke nutzen, verkaufen, lizenzieren oder vertreiben, ohne vorher eine ausdrückliche schriftliche Erlaubnis von [Ihr Name oder Ihr Unternehmen] einzuholen.
+1. **Kommerzielle Nutzung:** Sie dürfen die Software oder Teile davon nicht für kommerzielle Zwecke nutzen, verkaufen, lizenzieren oder vertreiben, ohne vorher eine ausdrückliche schriftliche Erlaubnis von Ralf Krümmel einzuholen.
 2. **Verwendung von Modifikationen:** Wenn Sie die Software modifizieren und die modifizierte Software verbreiten, müssen Sie diese Lizenz beibehalten und deutlich machen, dass Sie die Software modifiziert haben.
 3. **Anerkennung:** Sie müssen in der Software und in der Dokumentation, die alle wesentlichen Teile der Software oder Modifikationen enthält, eine entsprechende Urheberrechts- und Anerkennungserklärung beibehalten.
 
