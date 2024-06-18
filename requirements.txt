@@ -1,0 +1,3 @@
+PyQt5==5.15.6
+jedi==0.18.2
+pyinstaller==4.5.1
