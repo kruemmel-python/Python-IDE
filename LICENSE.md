@@ -1,6 +1,6 @@
 # Lizenz für Python IDE
 
-Diese Lizenz ("Lizenz") regelt die Nutzung der Software "Python IDE" ("Software"). Durch die Nutzung der Software stimmen Sie den
+Diese Lizenz regelt die Nutzung der Software "Python IDE" ("Software"). Durch die Nutzung der Software stimmen Sie den
 Bedingungen dieser Lizenz zu. Wenn Sie den Bedingungen dieser Lizenz nicht zustimmen, dürfen Sie die Software nicht nutzen.
 
 ## 1. Nutzung der Software
