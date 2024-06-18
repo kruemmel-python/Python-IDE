@@ -5,6 +5,7 @@ import jedi
 import os
 import tempfile
 import shutil
+import logging
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QVBoxLayout, QPlainTextEdit, QSplitter, QMenuBar,
     QAction, QWidget, QTextEdit, QInputDialog, QMessageBox, QFileDialog, QListWidget, QMenu, QCompleter
@@ -13,13 +14,16 @@ from PyQt5.QtCore import QProcess, Qt, QRect, QSize, QRegExp, QPoint
 from PyQt5.QtGui import QPainter, QTextFormat, QColor, QSyntaxHighlighter, QTextCharFormat, QFont, QTextCursor
 from Layout import CustomPalette
 import info  # Importieren des neuen Moduls
+import check_python  # Importieren des neuen Moduls
+
+# Konfigurieren des Logging-Moduls
+logging.basicConfig(filename='ide.log', level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s')
 
 if sys.stdout and hasattr(sys.stdout, 'buffer'):
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
-# Pfad zur eingebetteten Python-Version
-embedded_python_path = os.path.join(os.path.dirname(__file__), "python_embedded", "python.exe")
-
+# Pfad zur eingebetteten oder systemweiten Python-Version
+embedded_python_path = check_python.get_python_executable()
 
 class PythonHighlighter(QSyntaxHighlighter):
     def __init__(self, document):
@@ -92,7 +96,6 @@ class PythonHighlighter(QSyntaxHighlighter):
                 index = expression.indexIn(text, index + length)
         self.setCurrentBlockState(0)
 
-
 class LineNumberArea(QWidget):
     def __init__(self, editor):
         super().__init__(editor)
@@ -103,7 +106,6 @@ class LineNumberArea(QWidget):
 
     def paintEvent(self, event):
         self.code_editor.lineNumberAreaPaintEvent(event)
-
 
 class CodeEditor(QPlainTextEdit):
     def __init__(self, parent=None):
@@ -118,6 +120,7 @@ class CodeEditor(QPlainTextEdit):
 
         self.textChanged.connect(self.update_todo_list)
         self.completer = None
+        self.completions = []
 
     def lineNumberAreaWidth(self):
         digits = 1
@@ -178,11 +181,22 @@ class CodeEditor(QPlainTextEdit):
             self.parent().update_todo_list()
 
     def keyPressEvent(self, event):
-        super().keyPressEvent(event)
         if self.completer and self.completer.popup().isVisible():
-            return
+            if event.key() in (Qt.Key_Enter, Qt.Key_Return, Qt.Key_Tab):
+                self.insert_completion(self.completer.currentCompletion())
+                return
+            elif event.key() == Qt.Key_Escape:
+                self.completer.popup().hide()
+                return
+            else:
+                super().keyPressEvent(event)
+                return
+
+        super().keyPressEvent(event)
+
         if event.key() in (Qt.Key_Return, Qt.Key_Enter, Qt.Key_Tab, Qt.Key_Backtab):
             return
+
         cursor = self.textCursor()
         cursor.select(QTextCursor.WordUnderCursor)
         text = cursor.selectedText()
@@ -191,15 +205,22 @@ class CodeEditor(QPlainTextEdit):
 
     def show_completions(self, text):
         script = jedi.Script(text, path=self.current_file)
-        completions = script.complete()
-        if completions:
-            completion_strings = [c.name for c in completions]
-            self.completer = QCompleter(completion_strings)
+        self.completions = script.complete()
+        if self.completions:
+            completion_strings = [c.name for c in self.completions]
+            self.completer = QCompleter(completion_strings, self)
             self.completer.setWidget(self)
-            self.completer.popup().setCurrentIndex(self.completer.completionModel().index(0, 0))
-            self.completer.complete()
+            self.completer.setCompletionMode(QCompleter.PopupCompletion)
+            self.completer.setCaseSensitivity(Qt.CaseInsensitive)
+            self.completer.activated.connect(self.insert_completion)
+            cursor_rect = self.cursorRect()
+            cursor_rect.setWidth(self.completer.popup().sizeHintForColumn(0)
+                                 + self.completer.popup().verticalScrollBar().sizeHint().width())
+            self.completer.complete(cursor_rect)
 
     def insert_completion(self, completion):
+        if self.completer.widget() != self:
+            return
         cursor = self.textCursor()
         cursor.movePosition(QTextCursor.StartOfWord, QTextCursor.KeepAnchor)
         cursor.insertText(completion)
@@ -249,35 +270,35 @@ class Console(QMainWindow):
         # Menüleiste erstellen
         menu_bar = QMenuBar(self)
         self.setMenuBar(menu_bar)
-       
+
         # In Ihrer Hauptklasse, nachdem Sie die Menüleiste erstellt haben:
         menu_bar = self.menuBar()
         menu_bar.setStyleSheet("QMenuBar { background-color: #353535; color: #FFFFFF; }")
         # Menüpunkte erstellen
-        run_menu = menu_bar.addMenu('Run')
-        create_exe_menu = menu_bar.addMenu('Create EXE')
-        clear_output_menu = menu_bar.addMenu('Clear Output')  # Neuer Menüpunkt
+        run_menu = menu_bar.addMenu('Code')
+        create_exe_menu = menu_bar.addMenu('Programm erstellen')
+        clear_output_menu = menu_bar.addMenu('Konsole')  # Neuer Menüpunkt
         info_menu = menu_bar.addMenu('Info')  # Neuer Menüpunkt
-        install_package_menu = menu_bar.addMenu('Install Package')  # Neuer Menüpunkt
-        project_menu = menu_bar.addMenu('Project')  # Neues Menü für Projekte
-        view_menu = menu_bar.addMenu('View')  # Neues Menü für das Ein- und Ausblenden der Bereiche
-        open_project_menu = project_menu.addMenu('Open Project')  # Neuer Menüpunkt
-        new_project_menu = project_menu.addMenu('New Project')  # Neuer Menüpunkt
-        save_file_menu = menu_bar.addMenu('Save File')  # Neuer Menüpunkt
+        install_package_menu = menu_bar.addMenu('Bibliotheken')  # Neuer Menüpunkt
+        project_menu = menu_bar.addMenu('Projekt')  # Neues Menü für Projekte
+        view_menu = menu_bar.addMenu('Ansicht')  # Neues Menü für das Ein- und Ausblenden der Bereiche
+        open_project_menu = project_menu.addMenu('Projekt öffnen')  # Neuer Menüpunkt
+        new_project_menu = project_menu.addMenu('Projekt erstellen')  # Neuer Menüpunkt
+        save_file_menu = menu_bar.addMenu('Speichern')  # Neuer Menüpunkt
 
         # Aktionen für Menüpunkte erstellen
-        run_action = QAction('Run Script', self)
-        create_exe_action = QAction('Create EXE', self)
-        clear_output_action = QAction('Clear Output', self)  # Neuer Menüpunkt
+        run_action = QAction('Code ausführen', self)
+        create_exe_action = QAction('erstellen', self)
+        clear_output_action = QAction('Ausgabe löschen', self)  # Neuer Menüpunkt
         info_action = QAction('Info', self)  # Neue Aktion
-        install_package_action = QAction('Install Package', self)  # Neue Aktion
-        open_project_action = QAction('Open Project', self)  # Neue Aktion
-        new_project_action = QAction('New Project', self)  # Neue Aktion
-        save_file_action = QAction('Save File', self)  # Neue Aktion
-        toggle_project_files_action = QAction('Toggle Project Files', self)
-        toggle_code_editor_action = QAction('Toggle Code Editor', self)
-        toggle_terminal_action = QAction('Toggle Terminal', self)
-        toggle_todo_list_action = QAction('Toggle Todo List', self)
+        install_package_action = QAction('Neues Paket installieren', self)  # Neue Aktion
+        open_project_action = QAction('öffnen', self)  # Neue Aktion
+        new_project_action = QAction('erstellen', self)  # Neue Aktion
+        save_file_action = QAction('geladenen code speichern', self)  # Neue Aktion
+        toggle_project_files_action = QAction('Sichtbar Fenster Projekt', self)
+        toggle_code_editor_action = QAction('Sichtbar Code editor', self)
+        toggle_terminal_action = QAction('Sichtbar Konsole', self)
+        toggle_todo_list_action = QAction('Sichtbar Todo Liste', self)
 
         # Aktionen zu Menüpunkten hinzufügen
         run_menu.addAction(run_action)
@@ -326,9 +347,13 @@ class Console(QMainWindow):
         with tempfile.NamedTemporaryFile(delete=False, suffix=".py") as temp_script:
             temp_script.write(script.encode('utf-8'))
             temp_script_path = temp_script.name
-
+        try:            
         # Starten Sie einen neuen Subprozess, um das Skript auszuführen
-        self.execute_script(temp_script_path)
+            self.execute_script(temp_script_path)
+            
+        except subprocess.CalledProcessError as e:
+            logging.error(f"Script execution failed: {e}")
+            self.terminal.appendPlainText(f"ERROR: Script execution failed: {e}")
 
     def execute_script(self, script_path):
         process = subprocess.Popen([embedded_python_path, script_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
@@ -347,10 +372,13 @@ class Console(QMainWindow):
         exe_name, ok = QInputDialog.getText(self, 'Name der ausführbaren Datei', 'Bitte geben Sie den Namen der ausführbaren Datei ein:')
         
         if ok and exe_name:
-            subprocess.run([embedded_python_path, "-m", "PyInstaller", "--onefile", "--noconfirm", "--name", exe_name, "temp_script.py"])
-            self.terminal.appendPlainText(f"Executable created with name '{exe_name}' using pyinstaller.")
-        else:
-            self.terminal.appendPlainText("Executable creation cancelled.")
+            try:
+                subprocess.run([embedded_python_path, "-m", "PyInstaller", "--onefile", "--noconfirm", "--name", exe_name, "temp_script.py"])
+                logging.info(f"Executable created with name '{exe_name}' using pyinstaller.")
+                self.terminal.appendPlainText(f"Executable created with name '{exe_name}' using pyinstaller.")
+            except subprocess.CalledProcessError as e:
+                logging.error(f"Executable creation failed: {e}")
+                self.terminal.appendPlainText(f"ERROR: Executable creation failed: {e}")
 
     def install_package(self):
         package_name, ok = QInputDialog.getText(self, 'Install Package', 'Bitte geben Sie den Namen des zu installierenden Pakets ein:')
@@ -422,10 +450,10 @@ class Console(QMainWindow):
             try:
                 with open(new_file_path, 'w', encoding='utf-8') as new_file:
                     new_file.write("")
-                self.terminal.appendPlainText(f"Created new file: {new_file_path}")
+                self.terminal.appendPlainText(f"Neue Datei: {new_file_path}")
                 self.project_files.addItem(new_file_path)
             except Exception as e:
-                self.terminal.appendPlainText(f"Failed to create new file: {str(e)}")
+                self.terminal.appendPlainText(f"Fehler: Keine neue Datei erstellt: {str(e)}")
 
     def create_new_folder(self):
         if self.project_files.currentItem():
@@ -437,15 +465,15 @@ class Console(QMainWindow):
         else:
             directory = os.getcwd()
 
-        folder_name, ok = QInputDialog.getText(self, 'New Folder', 'Bitte geben Sie den Namen des neuen Ordners ein:')
+        folder_name, ok = QInputDialog.getText(self, 'Neuer Ordner', 'Bitte geben Sie den Namen des neuen Ordners ein:')
         if ok and folder_name:
             new_folder_path = os.path.join(directory, folder_name)
             try:
                 os.makedirs(new_folder_path)
-                self.terminal.appendPlainText(f"Created new folder: {new_folder_path}")
+                self.terminal.appendPlainText(f"Neuer Ordner erstellt: {new_folder_path}")
                 self.project_files.addItem(new_folder_path)
             except Exception as e:
-                self.terminal.appendPlainText(f"Failed to create new folder: {str(e)}")
+                self.terminal.appendPlainText(f"Fehler; Es konnte kein Ordner erstellt werden: {str(e)}")
 
     def delete_item(self):
         if self.project_files.currentItem():
@@ -455,10 +483,10 @@ class Console(QMainWindow):
                     shutil.rmtree(item_path)
                 else:
                     os.remove(item_path)
-                self.terminal.appendPlainText(f"Deleted: {item_path}")
+                self.terminal.appendPlainText(f"Markiertes Löschen: {item_path}")
                 self.project_files.takeItem(self.project_files.currentRow())
             except Exception as e:
-                self.terminal.appendPlainText(f"Failed to delete: {str(e)}")
+                self.terminal.appendPlainText(f"Fehler Löschen erfolglos: {str(e)}")
 
     def load_file(self, item):
         file_path = item.text()
@@ -466,21 +494,21 @@ class Console(QMainWindow):
             with open(file_path, 'r', encoding='utf-8') as file:
                 self.code_editor.setPlainText(file.read())
             self.code_editor.current_file = file_path
-            self.terminal.appendPlainText(f"Loaded file: {file_path}")
+            self.terminal.appendPlainText(f"Datei geladen: {file_path}")
             self.update_todo_list()
         except Exception as e:
-            self.terminal.appendPlainText(f"Failed to load file: {file_path}\n{str(e)}")
+            self.terminal.appendPlainText(f"konnte Datei nicht laden: {file_path}\n{str(e)}")
 
     def save_file(self):
         if self.code_editor.current_file:
             try:
                 with open(self.code_editor.current_file, 'w', encoding='utf-8') as file:
                     file.write(self.code_editor.toPlainText())
-                self.terminal.appendPlainText(f"File saved: {self.code_editor.current_file}")
+                self.terminal.appendPlainText(f"Datei gespeichert: {self.code_editor.current_file}")
             except Exception as e:
-                self.terminal.appendPlainText(f"Failed to save file: {self.code_editor.current_file}\n{str(e)}")
+                self.terminal.appendPlainText(f"Fehler beim Speichern: {self.code_editor.current_file}\n{str(e)}")
         else:
-            self.terminal.appendPlainText("No file loaded to save.")
+            self.terminal.appendPlainText("Keine Datei zum speichern geladen.")
 
     def print_output(self):
         try:
@@ -499,10 +527,12 @@ class Console(QMainWindow):
     def clear_output(self):
         # Löschen Sie den Inhalt der Konsolenausgabe
         self.terminal.clear()
+        logging.info("Konsolen Inhalt gelöscht.")
 
     def closeEvent(self, event):
         # Löschen Sie den Inhalt der Datei 'log.txt' beim Beenden des Programms
         open('log.txt', 'w').close()
+        logging.info("Programm geschlossen und log Datei gelöscht.")
 
     def update_todo_list(self):
         self.todo_list.clear()
