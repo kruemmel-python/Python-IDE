@@ -1,6 +1,6 @@
 # Lizenz für Python IDE
 
-Diese Lizenz regelt die Nutzung der Software "Python IDE" ("Software"). Durch die Nutzung der Software stimmen Sie den
+Diese Lizenz regelt die Nutzung der Software "Python IDE" ("Python IDE"). Durch die Nutzung der Software stimmen Sie den
 Bedingungen dieser Lizenz zu. Wenn Sie den Bedingungen dieser Lizenz nicht zustimmen, dürfen Sie die Software nicht nutzen.
 
 ## 1. Nutzung der Software
@@ -23,7 +23,7 @@ DIE AUS, AUS ODER IN VERBINDUNG MIT DER SOFTWARE ODER DER NUTZUNG ODER ANDEREN G
 
 ## 4. Beendigung
 
-Diese Lizenz bleibt so lange in Kraft, wie Sie die Software nutzen. Ihre Rechte unter dieser Lizenz werden automatisch und ohne Vorankündigung von [Ihr Name oder Ihr Unternehmen] beendet, wenn Sie gegen eine Bedingung dieser Lizenz verstoßen. Nach der Beendigung müssen Sie alle Kopien der Software und aller ihrer Komponenten löschen.
+Diese Lizenz bleibt so lange in Kraft, wie Sie die Software nutzen. Ihre Rechte unter dieser Lizenz werden automatisch und ohne Vorankündigung von Ralf Krümmel beendet, wenn Sie gegen eine Bedingung dieser Lizenz verstoßen. Nach der Beendigung müssen Sie alle Kopien der Software und aller ihrer Komponenten löschen.
 
 ## 5. Sonstiges
 
