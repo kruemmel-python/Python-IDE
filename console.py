@@ -1,35 +1,44 @@
-from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QPlainTextEdit, QSplitter, QMenuBar, QAction, QWidget, QListWidget, QMenu
+import os
+import sys
+from PyQt5.QtWidgets import (
+    QMainWindow, QVBoxLayout, QPlainTextEdit, QSplitter, QMenuBar, QAction, QWidget,
+    QListWidget, QMenu, QFileDialog
+)
 from PyQt5.QtCore import QProcess, Qt
 import logging
+from pathlib import Path
 from layout import CustomPalette
 from code_editor import CodeEditor
 import info
-from file_operations import open_project, new_project, create_new_file, create_new_folder, delete_item, load_file, save_file, install_package, update_package, uninstall_package, add_library_management_menu
+from file_operations import (
+    open_project, new_project, create_new_file, create_new_folder,
+    delete_item, load_file, save_file, install_package, update_package,
+    uninstall_package, add_library_management_menu
+)
 from todo_list import update_todo_list, goto_todo
 from process_manager import run_script, create_exe
+
 
 class Console(QMainWindow):
     def __init__(self, embedded_python_path):
         super().__init__()
         self.embedded_python_path = embedded_python_path
+        self.project_dir = None
         self.initUI()
 
     def initUI(self):
-        CustomPalette.set_dark_palette(self)  # Setzen Sie das benutzerdefinierte Farbschema
+        CustomPalette.set_dark_palette(self)
 
         self.process = QProcess(self)
         self.terminal = QPlainTextEdit(self)
         self.terminal.setReadOnly(True)
 
-        # Erstellen Sie ein QSplitter-Widget für den Code-Editor und die Terminal-Ausgabe
         self.splitter = QSplitter(Qt.Vertical)
         self.splitter.setHandleWidth(2)
 
-        # Erstellen Sie ein QSplitter-Widget für die Projektdateien und den Code-Editor/Terminal-Bereich
         self.main_splitter = QSplitter(Qt.Horizontal)
         self.main_splitter.setHandleWidth(2)
 
-        # Fügen Sie die Widgets zum QSplitter hinzu
         self.project_files = QListWidget(self)
         self.project_files.setContextMenuPolicy(Qt.CustomContextMenu)
         self.project_files.customContextMenuRequested.connect(self.open_context_menu)
@@ -45,58 +54,53 @@ class Console(QMainWindow):
         self.main_splitter.addWidget(self.splitter)
         self.main_splitter.addWidget(self.todo_list)
 
-        # Layout für QSplitter
         layout = QVBoxLayout()
         layout.addWidget(self.main_splitter)
 
-        # Menüleiste erstellen
         menu_bar = QMenuBar(self)
         self.setMenuBar(menu_bar)
 
-        # In Ihrer Hauptklasse, nachdem Sie die Menüleiste erstellt haben:
         menu_bar = self.menuBar()
         menu_bar.setStyleSheet("QMenuBar { background-color: #353535; color: #FFFFFF; }")
-        # Menüpunkte erstellen
+
         run_menu = menu_bar.addMenu('Code')
         create_exe_menu = menu_bar.addMenu('Programm erstellen')
-        clear_output_menu = menu_bar.addMenu('Konsole')  # Neuer Menüpunkt
-        info_menu = menu_bar.addMenu('Info')  # Neuer Menüpunkt
-        library_menu = menu_bar.addMenu('Bibliotheken')  # Neuer Menüpunkt
-        project_menu = menu_bar.addMenu('Projekt')  # Neues Menü für Projekte
-        view_menu = menu_bar.addMenu('Ansicht')  # Neues Menü für das Ein- und Ausblenden der Bereiche
-        open_project_menu = project_menu.addMenu('Projekt öffnen')  # Neuer Menüpunkt
-        new_project_menu = project_menu.addMenu('Projekt erstellen')  # Neuer Menüpunkt
-        save_file_menu = menu_bar.addMenu('Speichern')  # Neuer Menüpunkt
+        clear_output_menu = menu_bar.addMenu('Konsole')
+        info_menu = menu_bar.addMenu('Info')
+        library_menu = menu_bar.addMenu('Bibliotheken')
+        project_menu = menu_bar.addMenu('Projekt')
+        view_menu = menu_bar.addMenu('Ansicht')
+        open_project_menu = project_menu.addMenu('Projekt öffnen')
+        new_project_menu = project_menu.addMenu('Projekt erstellen')
+        save_file_menu = menu_bar.addMenu('Speichern')
 
-        # Aktionen für Menüpunkte erstellen
         run_action = QAction('Code ausführen', self)
         run_selected_action = QAction('Markierten Code ausführen', self)
         create_exe_action = QAction('erstellen', self)
-        clear_output_action = QAction('Ausgabe löschen', self)  # Neuer Menüpunkt
-        info_action = QAction('Info', self)  # Neue Aktion
-        install_package_action = QAction('Neues Paket installieren', self)  # Neue Aktion
-        update_package_action = QAction('Paket aktualisieren', self)  # Neue Aktion
-        uninstall_package_action = QAction('Paket deinstallieren', self)  # Neue Aktion
-        open_project_action = QAction('öffnen', self)  # Neue Aktion
-        new_project_action = QAction('erstellen', self)  # Neue Aktion
-        save_file_action = QAction('geladenen code speichern', self)  # Neue Aktion
+        clear_output_action = QAction('Ausgabe löschen', self)
+        info_action = QAction('Info', self)
+        install_package_action = QAction('Neues Paket installieren', self)
+        update_package_action = QAction('Paket aktualisieren', self)
+        uninstall_package_action = QAction('Paket deinstallieren', self)
+        open_project_action = QAction('öffnen', self)
+        new_project_action = QAction('erstellen', self)
+        save_file_action = QAction('geladenen code speichern', self)
         toggle_project_files_action = QAction('Sichtbar Fenster Projekt', self)
         toggle_code_editor_action = QAction('Sichtbar Code editor', self)
         toggle_terminal_action = QAction('Sichtbar Konsole', self)
         toggle_todo_list_action = QAction('Sichtbar Todo Liste', self)
 
-        # Aktionen zu Menüpunkten hinzufügen
         run_menu.addAction(run_action)
         run_menu.addAction(run_selected_action)
         create_exe_menu.addAction(create_exe_action)
-        clear_output_menu.addAction(clear_output_action)  # Neuer Menüpunkt
-        info_menu.addAction(info_action)  # Neue Aktion
-        library_menu.addAction(install_package_action)  # Neue Aktion
-        library_menu.addAction(update_package_action)  # Neue Aktion
-        library_menu.addAction(uninstall_package_action)  # Neue Aktion
-        open_project_menu.addAction(open_project_action)  # Neue Aktion
-        new_project_menu.addAction(new_project_action)  # Neue Aktion
-        save_file_menu.addAction(save_file_action)  # Neue Aktion
+        clear_output_menu.addAction(clear_output_action)
+        info_menu.addAction(info_action)
+        library_menu.addAction(install_package_action)
+        library_menu.addAction(update_package_action)
+        library_menu.addAction(uninstall_package_action)
+        open_project_menu.addAction(open_project_action)
+        new_project_menu.addAction(new_project_action)
+        save_file_menu.addAction(save_file_action)
         view_menu.addAction(toggle_project_files_action)
         view_menu.addAction(toggle_code_editor_action)
         view_menu.addAction(toggle_terminal_action)
@@ -105,20 +109,19 @@ class Console(QMainWindow):
         run_action.triggered.connect(lambda: self.run_script(self.code_editor.toPlainText()))
         run_selected_action.triggered.connect(self.code_editor.run_selected_code)
         create_exe_action.triggered.connect(lambda: create_exe(self))
-        clear_output_action.triggered.connect(self.clear_output)  # Neues Slot verbinden
-        info_action.triggered.connect(info.show_info)  # Neue Slot verbinden
-        install_package_action.triggered.connect(lambda: install_package(self))  # Neue Slot verbinden
-        update_package_action.triggered.connect(lambda: update_package(self))  # Neue Slot verbinden
-        uninstall_package_action.triggered.connect(lambda: uninstall_package(self))  # Neue Slot verbinden
-        open_project_action.triggered.connect(self.open_project)  # Neue Slot verbinden
-        new_project_action.triggered.connect(self.new_project)  # Neue Slot verbinden
-        save_file_action.triggered.connect(self.save_file)  # Neue Slot verbinden
+        clear_output_action.triggered.connect(self.clear_output)
+        info_action.triggered.connect(info.show_info)
+        install_package_action.triggered.connect(lambda: install_package(self))
+        update_package_action.triggered.connect(lambda: update_package(self))
+        uninstall_package_action.triggered.connect(lambda: uninstall_package(self))
+        open_project_action.triggered.connect(self.open_project)
+        new_project_action.triggered.connect(self.new_project)
+        save_file_action.triggered.connect(self.save_file)
         toggle_project_files_action.triggered.connect(self.toggle_project_files)
         toggle_code_editor_action.triggered.connect(self.toggle_code_editor)
         toggle_terminal_action.triggered.connect(self.toggle_terminal)
         toggle_todo_list_action.triggered.connect(self.toggle_todo_list)
 
-        # Setzen des zentralen Widgets
         central_widget = QWidget(self)
         central_widget.setLayout(layout)
         self.setCentralWidget(central_widget)
@@ -127,7 +130,16 @@ class Console(QMainWindow):
         self.setGeometry(100, 100, 1200, 800)
 
     def open_project(self):
-        open_project(self)
+        project_dir = QFileDialog.getExistingDirectory(self, 'Open Project', os.getcwd())
+        if project_dir:
+            self.project_dir = project_dir
+            sys.path.insert(0, project_dir)
+            self.project_files.clear()
+            for root, _, files in os.walk(project_dir):
+                for file in files:
+                    if file.endswith('.py'):
+                        file_path = os.path.join(root, file)
+                        self.project_files.addItem(file_path)
 
     def new_project(self):
         new_project(self)
@@ -169,12 +181,10 @@ class Console(QMainWindow):
         self.terminal.appendPlainText(f"ERROR: {error}")
 
     def clear_output(self):
-        # Löschen Sie den Inhalt der Konsolenausgabe
         self.terminal.clear()
         logging.info("Konsolen Inhalt gelöscht.")
 
     def closeEvent(self, event):
-        # Löschen Sie den Inhalt der Datei 'log.txt' beim Beenden des Programms
         open('log.txt', 'w').close()
         logging.info("Programm geschlossen und log Datei gelöscht.")
 
@@ -199,14 +209,13 @@ class Console(QMainWindow):
     def run_script(self, code=None):
         if code is None:
             code = self.code_editor.toPlainText()
+        run_script(self, code)
 
-        # Starten des Prozesses
-        self.process.start(self.embedded_python_path, ['-c', code])
-        self.process.readyReadStandardOutput.connect(self.print_output)
-        self.process.readyReadStandardError.connect(self.print_error)
 
 if __name__ == '__main__':
+    from PyQt5.QtWidgets import QApplication
+    import sys
     app = QApplication(sys.argv)
-    main_win = Console('path_to_embedded_python')  # Pfad zum eingebetteten Python-Interpreter angeben
+    main_win = Console('path_to_embedded_python')
     main_win.show()
     sys.exit(app.exec_())
