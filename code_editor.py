@@ -7,7 +7,6 @@ from line_number_area import LineNumberArea
 from doc_widget import DocWidget
 import re
 
-
 class CodeEditor(QPlainTextEdit):
     def __init__(self, console=None, parent=None):
         super().__init__(parent)
@@ -23,7 +22,7 @@ class CodeEditor(QPlainTextEdit):
         self.textChanged.connect(self.update_todo_list)
         self.completer = None
         self.completions = []
-        self.doc_widget = None  # Hinzugefügt: Referenz zum Dokumentationsfenster
+        self.doc_widget = None  # Referenz zum Dokumentationsfenster
 
         self.setMouseTracking(True)
 
@@ -126,49 +125,12 @@ class CodeEditor(QPlainTextEdit):
                 self.completer.setCaseSensitivity(Qt.CaseInsensitive)
                 self.completer.activated.connect(self.insert_completion)
 
-                # Hinzugefügt: Kontextmenü für QCompleter-Elemente
-                self.completer.popup().setContextMenuPolicy(Qt.CustomContextMenu)
-                self.completer.popup().customContextMenuRequested.connect(self.show_completer_context_menu)
-
                 cursor_rect = self.cursorRect()
                 cursor_rect.setWidth(self.completer.popup().sizeHintForColumn(0)
                                      + self.completer.popup().verticalScrollBar().sizeHint().width())
                 self.completer.complete(cursor_rect)
         except Exception as e:
             print(f"Error getting completions: {e}")
-
-    def show_completer_context_menu(self, position):
-        menu = QMenu()
-        action = menu.addAction("Show Documentation")
-        action.triggered.connect(self.show_documentation_from_completer)
-        menu.exec_(self.completer.popup().mapToGlobal(position))
-
-    def show_documentation_from_completer(self):
-        selected_item = self.completer.currentCompletion()
-        if not selected_item:
-            return
-
-        code = self.toPlainText()
-        try:
-            script = jedi.Script(code, path=self.current_file)
-            definitions = script.complete()
-            docstring = None
-            for definition in definitions:
-                if definition.name == selected_item:
-                    docstring = definition.docstring()
-                    break
-            if docstring:
-                if not self.doc_widget:
-                    self.doc_widget = DocWidget(docstring, self)
-                else:
-                    self.doc_widget.update_docstring(docstring)
-                cursor = self.textCursor()
-                cursor_rect = self.cursorRect(cursor)
-                global_pos = self.mapToGlobal(cursor_rect.bottomRight())
-                self.doc_widget.show_at(global_pos)
-                self.doc_widget.setFocus()
-        except Exception as e:
-            print(f"Error getting documentation: {e}")
 
     def insert_completion(self, completion):
         if self.completer.widget() != self:
