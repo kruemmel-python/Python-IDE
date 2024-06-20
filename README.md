@@ -5,44 +5,115 @@ Willkommen zur **Python IDE**, einer benutzerfreundlichen integrierten Entwicklu
 ![image](https://github.com/kruemmel-python/Python-IDE/assets/169469747/e7a2be9f-cc84-4c5a-a560-0a80c4049c1c)
 
 
-## Features
+# Python IDE
 
-- **Syntaxhervorhebung** für Python-Code.
-- **Code-Vervollständigung** mit Jedi.
-- **TODO-Liste** zur Verfolgung Ihrer Aufgaben.
-- **Projektverwaltung** zum Öffnen, Erstellen und Verwalten von Projekten.
-- **Konsolenausgabe** für die Ausführung und Anzeige von Skriptergebnissen.
-- **Erstellen von ausführbaren Dateien** mit PyInstaller.
-- **Paketinstallation** über ein integriertes Paketverwaltungssystem.
+Eine benutzerdefinierte Python-IDE mit integriertem Projekt-Explorer, Code-Editor, Konsole, interaktiver Konsole und Unterstützung für Plugins. Diese IDE ist darauf ausgelegt, sowohl mit einer systeminstallierten Python-Version als auch mit einer im Programmverzeichnis befindlichen eingebetteten Python-Version zu arbeiten.
 
-## Installation
+## Funktionen
 
-1. **Clone das Repository:**
+### Projekt-Explorer
 
-    ```bash
-    git clone https://github.com/kruemmel-python/Python-IDE
-    cd Python-IDE
-    ```
+- Projekte aus einem Verzeichnis laden
+- Neue Projekte erstellen
+- Neue Dateien und Ordner hinzufügen
+- Dateien und Ordner löschen
+- Doppelklick auf Dateien zum Öffnen im Code-Editor
 
-2. **Installiere die Abhängigkeiten:**
+### Code-Editor
 
-    ```bash
-    pip install -r requirements.txt
-    ```
+- Syntaxhervorhebung
+- Fehlerhervorhebung
+- Autovervollständigung
+- Linting mit pylint
 
-3. **Starte die IDE:**
+### Konsole
 
-    ```bash
-    python main.py
-    ```
+- Anzeige des Programmoutputs
+- Anzeige von Fehlermeldungen und Logs
 
-## Verwendung
+### Interaktive Konsole
 
-Nach dem Start der IDE können Sie neue Projekte erstellen, bestehende Projekte öffnen und mit dem Schreiben und Ausführen von Python-Code beginnen. Die IDE bietet eine Vielzahl von Funktionen, um Ihre Entwicklungserfahrung zu verbessern.
+- Ausführen von Python-Code interaktiv
 
-## Contributing
+### Menüoptionen
 
-Beiträge sind willkommen! Bitte fork das Repository und erstelle einen Pull-Request mit deinen Änderungen. Stellen Sie sicher, dass alle neuen Funktionen getestet sind und den bestehenden Code nicht brechen.
+#### Code-Menü
+
+- **Interaktives Programm ausführen (Ctrl+I):** Führt das aktuelle Skript in der interaktiven Konsole aus
+- **Lint Code (Ctrl+Shift+F):** Lintet das aktuelle Skript mit pylint
+- **Git Commit (Ctrl+Shift+C):** Commits Änderungen in das lokale Git-Repository
+- **Snippet hinzufügen (Ctrl+Shift+N):** Fügt den aktuellen Code als Snippet hinzu
+- **Unit Tests ausführen (Ctrl+T):** Führt Unit-Tests für das aktuelle Projekt aus
+- **Code Refactoring (Ctrl+Shift+R):** Refaktorisieren des Codes
+- **Debugger starten (Ctrl+D):** Startet den Debugger
+
+#### Programm erstellen-Menü
+
+- **erstellen:** Erstellen einer ausführbaren Datei aus dem aktuellen Projekt
+
+#### Konsole-Menü
+
+- **Ausgabe löschen (Ctrl+L):** Löscht den Konsolenausgang
+- **Interaktive Konsole löschen (Ctrl+Shift+L):** Löscht die interaktive Konsole
+
+#### Info-Menü
+
+- **Info (Ctrl+H):** Zeigt Informationen über die IDE an
+- **Tastenkürzel (Ctrl+K):** Zeigt Tastenkürzel an
+- **Text übersetzen (Ctrl+Shift+T):** Übersetzt den ausgewählten Text
+
+#### Bibliotheken-Menü
+
+- **Neues Paket installieren:** Installiert ein neues Python-Paket
+- **Paket aktualisieren:** Aktualisiert ein vorhandenes Python-Paket
+- **Paket deinstallieren:** Deinstalliert ein Python-Paket
+
+#### Projekt-Menü
+
+- **Projekt öffnen (Ctrl+O):** Öffnet ein vorhandenes Projekt
+- **Projekt erstellen (Ctrl+N):** Erstellt ein neues Projekt
+
+#### Speichern-Menü
+
+- **geladenen Code speichern (Ctrl+S):** Speichert den aktuellen Code
+
+
+#### Ansicht-Menü
+
+- Sichtbarkeit der verschiedenen Dock-Widgets umschalten:
+  - **Projekt Explorer (Ctrl+T)**
+  - **Code Editor**
+  - **Konsole**
+  - **TODO Liste**
+  - **Interaktive Konsole**
+
+#### Einstellungen-Menü
+
+- **Layout speichern (Ctrl+Shift+S):** Speichert die aktuellen Layouteinstellungen
+
+### Plugin-Unterstützung
+
+Die IDE unterstützt Plugins zur Erweiterung der Funktionalität. Plugins können erstellt und verwaltet werden, ohne den Kerncode der IDE zu ändern.
+
+Siehe die [Plugin Anleitung](plugin_anleitung.md) für detaillierte Anweisungen zum Erstellen und Verwenden von Plugins.
+
+### Systemanforderungen
+
+- Die IDE kann sowohl mit einer systeminstallierten Python-Version als auch mit einer eingebetteten Python-Version arbeiten.
+- Die eingebettete Python-Version sollte im Verzeichnis `python_embedded` innerhalb des Programmordners liegen.
+
+## Erste Schritte
+
+### Voraussetzungen
+
+- Python 3.8 oder höher
+
+### Installation
+
+1. Klone das Repository:
+   ```sh
+   git clone https://github.com/kruemmel-python/Python-IDE
+
 
 ## Lizenz
 
