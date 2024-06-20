@@ -12,6 +12,24 @@ Dieses Benutzerhandbuch beschreibt die Funktionen und die Verwendung der Python 
 - **Unit Tests ausführen**: Führt Unit-Tests für das aktuelle Projekt aus und zeigt die Ergebnisse im Konsolen-Output.
 - **Code Refactoring**: Hilft bei der Umstrukturierung des Codes, wie dem Ersetzen von Variablen im gesamten Code.
 - **Debugger starten**: Startet den Debugger und ermöglicht das Setzen von Breakpoints und das schrittweise Durchgehen des Codes.
+  
+  Hier sind die grundlegenden Schritte zur Verwendung des PDB-Debuggers:
+1.	Befehle in der PDB-Shell:
+o	n (next): Führt die nächste Zeile aus und hält danach an.
+o	c (continue): Führt den Code weiter bis zum nächsten Haltepunkt aus.
+o	s (step): Tritt in Funktionen ein und führt diese Zeile für Zeile aus.
+o	q (quit): Beendet den Debugger.
+o	l (list): Zeigt den Quellcode um den aktuellen Haltepunkt an.
+2.	Durch den Code navigieren:
+o	Um die nächste Zeile auszuführen und zum nächsten Haltepunkt zu gelangen, geben Sie n ein.
+o	Um den Code bis zum nächsten Haltepunkt oder Ende auszuführen, geben Sie c ein.
+o	Um in Funktionen einzutreten und diese Schritt für Schritt auszuführen, geben Sie s ein.
+3.	Variablen inspizieren:
+o	Geben Sie den Namen einer Variablen ein, um ihren aktuellen Wert zu sehen.
+o	Verwenden Sie den Befehl p gefolgt von einem Ausdruck, um den Ausdruck zu drucken, z.B. p variable_name.
+4.	Haltepunkte setzen:
+o	Haltepunkte können direkt im Code durch das Einfügen der Zeile import pdb; pdb.set_trace() gesetzt werden.
+
 
 ### Programm erstellen
 - **Erstellen**: Erstellt eine ausführbare Datei aus dem aktuellen Python-Code im Editor.
