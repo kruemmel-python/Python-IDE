@@ -1,7 +1,7 @@
 # plugins/debugger_plugin.py
 from plugin_interface import PluginInterface
+from PyQt5.QtWidgets import QAction
 import subprocess
-import logging
 
 class DebuggerPlugin(PluginInterface):
     def initialize(self):

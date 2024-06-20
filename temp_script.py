@@ -1,41 +1,24 @@
-import os
-import zipfile
-import tkinter as tk
-from tkinter import filedialog
+import sys
+import io
+from PyQt5.QtWidgets import QApplication
+from console import Console
+import check_python
 
-def entpacke_zip(quellverzeichnis, zielverzeichnis):
-    # Gehe durch jedes Datei im Quellverzeichnis
-    for datei in os.listdir(quellverzeichnis):
-        if datei.endswith('.zip'):
-            # Erstelle einen Pfad zur ZIP-Datei
-            zip_pfad = os.path.join(quellverzeichnis, datei)
-            # Erstelle einen Ordner im Zielverzeichnis mit dem gleichen Namen wie die ZIP-Datei (ohne die .zip-Endung)
-            ordner_name = datei[:-4]
-            extraktions_pfad = os.path.join(zielverzeichnis, ordner_name)
-            os.makedirs(extraktions_pfad, exist_ok=True)
-            
-            # Entpacke die ZIP-Datei in den neu erstellten Ordner
-            with zipfile.ZipFile(zip_pfad, 'r') as zip_ref:
-                zip_ref.extractall(extraktions_pfad)
+import logging
+logging.basicConfig(filename='ide.log', level=logging.DEBUG, format='%(asctime)s:%(levelname)s:%(message)s')
 
-    print('Alle ZIP-Dateien wurden erfolgreich entpackt.')
+if sys.stdout and hasattr(sys.stdout, 'buffer'):
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
-def ordner_auswaehlen():
-    root = tk.Tk()
-    root.withdraw()  # Verstecke das Tkinter-Hauptfenster
+def main():
+    logging.debug("Anwendung wird gestartet")
+    app = QApplication(sys.argv)
+    embedded_python_path = check_python.get_python_executable()
+    logging.debug(f"Embedded Python Path: {embedded_python_path}")
+    console = Console(embedded_python_path)
+    console.show()
+    logging.debug("Hauptfenster wird angezeigt")
+    sys.exit(app.exec_())
 
-    # Öffne den Dialog zur Auswahl des Quellverzeichnisses
-    quellverzeichnis = filedialog.askdirectory(title='Wähle das Verzeichnis mit den ZIP-Dateien')
-    if not quellverzeichnis:
-        print("Kein Quellverzeichnis ausgewählt.")
-        return
-
-    # Öffne den Dialog zur Auswahl des Zielverzeichnisses
-    zielverzeichnis = filedialog.askdirectory(title='Wähle das Zielverzeichnis für das Entpacken')
-    if not zielverzeichnis:
-        print("Kein Zielverzeichnis ausgewählt.")
-        return
-
-    entpacke_zip(quellverzeichnis, zielverzeichnis)
-
-ordner_auswaehlen()
+if __name__ == '__main__':
+    main()

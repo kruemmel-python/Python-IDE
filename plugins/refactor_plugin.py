@@ -1,33 +1,37 @@
+# plugins/refactor_plugin.py
+
 from plugin_interface import PluginInterface
-from PyQt5.QtWidgets import QInputDialog  # Hinzufügen des Imports
-import logging
+from PyQt5.QtWidgets import QAction, QInputDialog
 
 class RefactorPlugin(PluginInterface):
+    def __init__(self, ide):
+        super().__init__(ide)
+        self.action = QAction('Code Refactoring', self.ide)
+        self.action.setShortcut('Ctrl+Shift+R')
+        self.action.triggered.connect(self.refactor_code)
+
     def initialize(self):
-        self.action = self.ide.create_action('Code Refactoring', self.refactor_code, 'Ctrl+Shift+R')
         self.ide.add_action_to_menu('Code', self.action)
-        logging.info("RefactorPlugin initialized")
 
     def deinitialize(self):
         self.ide.remove_action_from_menu('Code', self.action)
-        logging.info("RefactorPlugin deinitialized")
 
     def refactor_code(self):
         self.ide.console_output.appendPlainText("Code Refactoring wird ausgeführt...")
-        # Hier können Sie den Code zum Refactoring einfügen
-        try:
-            selected_text = self.ide.code_editor.textCursor().selectedText()
-            if selected_text:
-                new_name, ok = QInputDialog.getText(self.ide, 'Code Refactoring', f'Ersetzen "{selected_text}" durch:')
-                if ok and new_name:
-                    cursor = self.ide.code_editor.textCursor()
-                    cursor.beginEditBlock()
-                    cursor.removeSelectedText()
-                    cursor.insertText(new_name)
-                    cursor.endEditBlock()
-                    self.ide.console_output.appendPlainText(f'"{selected_text}" wurde durch "{new_name}" ersetzt.')
-            else:
-                self.ide.console_output.appendPlainText("Kein Text ausgewählt.")
-        except Exception as e:
-            self.ide.console_output.appendPlainText(f"Fehler beim Refactoring: {str(e)}")
-        logging.debug("Code Refactoring ausgeführt")
+
+        cursor = self.ide.code_editor.textCursor()
+        selected_text = cursor.selectedText()
+
+        if not selected_text:
+            self.ide.console_output.appendPlainText("Kein Text ausgewählt zum Refaktorisieren.")
+            return
+
+        new_name, ok = QInputDialog.getText(self.ide, 'Code Refactoring', f'Ersetzen "{selected_text}" durch:')
+        if ok and new_name:
+            # Refactoring im gesamten Code durchführen
+            code = self.ide.code_editor.toPlainText()
+            updated_code = code.replace(selected_text, new_name)
+            self.ide.code_editor.setPlainText(updated_code)
+            self.ide.console_output.appendPlainText(f'"{selected_text}" wurde im gesamten Code durch "{new_name}" ersetzt.')
+        else:
+            self.ide.console_output.appendPlainText("Refaktorisieren abgebrochen.")

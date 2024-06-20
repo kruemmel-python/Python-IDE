@@ -1,131 +1,113 @@
 import tkinter as tk
-import pyautogui
+from tkinter import messagebox, ttk
+import sqlite3
 
-# Erweiterung der Liste um 30 zusätzliche Windows 11 Tastenkürzel
-additional_shortcuts = {
-    "alt+esc": "Durchlaufen sie geöffnete Fenster",
-    "alt+f4": "Aktives Fenster schließen",
-    "alt+f8": "Zeigt das eingegebene Kennwort auf dem Anmeldebildschirm an",
-    "alt+left": "Zurück",
-    "alt+pgdn": "Um einen Bildschirm nach unten navigieren",
-    "alt+pgup": "Um einen Bildschirm nach oben verschieben",
-    "alt+right": "Vorwärts",
-    "alt+space": "Kontextmenü für das aktive Fenster öffnen",
-    "alt+tab": "Wechseln Sie zwischen geöffneten Apps",
-    "ctrl+alt+tab": "Geöffnete Apps anzeigen",
-    "ctrl+arrow keys": "Startmenügröße ändern",
-    "ctrl+arrow keys (zur Auswahl) + space": "Wählen Sie mehrere Elemente auf dem Desktop oder Explorer aus",
-    "ctrl+klicken auf eine gruppierte App-Schaltfläche": "Durchlaufen Sie Fenster in der Gruppe von der Taskleiste aus",
-    "ctrl+down": "Bewegen Sie den Cursor an den Anfang des nächsten Absatzes",
-    "ctrl+f5": "Aktuelles Fenster aktualisieren",
-    "ctrl+left": "Bewegen Sie den Cursor an den Anfang des vorherigen Worts",
-    "ctrl+right": "Bewegen Sie den Cursor an den Anfang des nächsten Worts",
-    "ctrl+shift": "Tastaturlayout wechseln",
-    "ctrl+shift+arrow keys": "Textblock auswählen",
-    "ctrl+shift+app-click": "Führen Sie die App über die Taskleiste als Administrator aus",
-    "ctrl+shift+esc": "Task-Manager öffnen",
-    "ctrl+space": "Aktivieren oder deaktivieren Sie den chinesischen IME",
-    "ctrl+up": "Bewegen des Cursors an den Anfang des vorherigen Absatzes",
-    "shift+arrow keys": "Wählen Sie mehrere Elemente aus",
-    "shift+app-click": "Öffnen Sie eine weitere Instanz einer App über die Taskleiste",
-    "shift+f10": "Kontextmenü für ausgewähltes Element öffnen",
-    "shift+right-click app-button": "Fenstermenü für die App über die Taskleiste anzeigen",
-    "shift+right-click grouped app-button": "Fenstermenü für die Gruppe auf der Taskleiste anzeigen",
-    "win+tab": "Vorgangsansicht öffnen",
-    "win+ctrl+d": "Hinzufügen eines virtuellen Desktops",
-    "win+ctrl+right": "Wechseln Sie zwischen virtuellen Desktops, die Sie auf der rechten Seite erstellt haben",
-    "win+ctrl+left": "Wechseln Sie zwischen virtuellen Desktops, die Sie auf der linken Seite erstellt haben",
-    "win+ctrl+f4": "Schließen Sie den virtuellen Desktop, den Sie verwenden",
-    "win": "Startmenü öffnen",
-    "win+a": "Öffnen Sie das Info-Center",
-    "win+alt+d": "Datum und Uhrzeit des Öffnens in der Taskleiste",
-    "win+alt+number (0-9)": "Öffnen Sie die Sprungliste der App in der Zahlenposition auf der Taskleiste",
-    "win+b": "Legen Sie den Fokusbenachrichtigungsbereich auf der Taskleiste fest",
-    "win+c": "Copilot öffnen/schließen",
-    "win+,": "Vorübergehender Blick auf den Desktop",
-    "win+ctrl+d": "Erstellen eines virtuellen Desktops",
-    "win+ctrl+enter": "Sprachausgabe öffnen",
-    "win+ctrl+f": "Öffnen Sie die Suche nach dem Gerät in einem Domänennetzwerk",
-    "win+ctrl+f4": "Schließen Sie den aktiven virtuellen Desktop",
-    "win+ctrl+left": "Wechseln Sie zum virtuellen Desktop auf der linken Seite",
-    "win+ctrl+number (0-9)": "Wechseln Sie zum letzten aktiven Fenster der App in der Nummernposition auf der Taskleiste",
-    "win+ctrl+q": "Öffnen Sie Schnellhilfe",
-    "win+ctrl+right": "Wechseln Sie zum virtuellen Desktop auf der rechten Seite",
-    "win+ctrl+shift+b": "Reaktivieren Sie das Gerät, wenn sie schwarz oder leer ist",
-    "win+ctrl+shift+number (0-9)": "Öffnen Sie eine weitere Instanz als Administrator der App in der Nummerposition auf der Taskleiste",
-    "win+ctrl+space": "Ändern Sie die zuvor ausgewählte Eingabeoption",
-    "win+d": "Anzeigen und Ausblenden des Desktops",
-    "win+down": "App-Fenster minimieren",
-    "win+e": "Öffnen Sie Explorer",
-    "win+esc": "Bildschirmlupe beenden",
-    "win+f": "Starten Sie die Feedback-Hub-App",
-    "win+/": "Starten Sie die IME-Neuversion",
-    "win+g": "Starten Sie die Spieleleisten-App",
-    "win+h": "Funktion zum Öffnen des Diktats",
-    "win+home": "Minimieren oder maximieren Sie alle außer dem aktiven Desktopfenster",
-    "win+i": "Einstellungen öffnen",
-    "win+j": "Legen Sie den Fokus auf einen Tipp für Windows 10 fest, falls zutreffend",
-    "win+k": "Öffnen Sie die Verbindungseinstellungen",
-    "win+l": "Sperrt den Computer",
-    "win+left": "App oder Fenster nach links ausrichten",
-    "win+m": "Minimieren Sie alle Fenster",
-    "win+-": "Verkleinern Sie die Bildschirmlupe",
-    "win+number (0-9)": "Öffnen Sie die App an der Position der Zahl auf der Taskleiste",
-    "win+o": "Geräteausrichtung sperren",
-    "win+p": "Öffnen Sie die Projekteinstellungen",
-    "win+pause": "Dialogfeld 'Systemeigenschaften anzeigen'",
-    "win+.;": "Emoji-Bereich öffnen",
-    "win+=": "Vergrößern Sie die Bildschirmlupe",
-    "win+prtscn": "Erfassen Sie einen vollständigen Screenshot im Ordner 'Screenshots'"
-}
+class Schuelerverwaltung(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.conn = sqlite3.connect('schuelerverwaltung.db')
+        self.curs = self.conn.cursor()
+        self.create_table()
+        self.initUI()
 
-# Funktion zum Ausführen eines Shortcuts
-def execute_shortcut(shortcut):
-    try:
-        keys = shortcut.lower().split('+')
-        pyautogui.hotkey(*keys)
-    except Exception as e:
-        print(f"Fehler: {e}")
+    def create_table(self):
+        self.curs.execute('''CREATE TABLE IF NOT EXISTS klassen (
+                                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                name TEXT UNIQUE)''')
+        self.curs.execute('''CREATE TABLE IF NOT EXISTS schueler (
+                                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                name TEXT,
+                                klasse_id INTEGER,
+                                FOREIGN KEY(klasse_id) REFERENCES klassen(id))''')
+        self.conn.commit()
 
-# Funktion zum Scrollen mit dem Mausrad
-def on_mouse_wheel(event):
-    canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+    def initUI(self):
+        self.title("Schülerverwaltung")
+        self.geometry("600x400")
 
-# Hauptfenster erstellen
-root = tk.Tk()
-root.title("Windows 11 Tastenkombinationen")
-root.geometry('940x680')  # Setzt die Fenstergröße auf 640x480
+        # Hauptlayout
+        main_frame = tk.Frame(self)
+        main_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
 
-# Scrollbar erstellen
-scrollbar = tk.Scrollbar(root)
-scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.daten_eingeben_btn = tk.Button(main_frame, text="Daten eingeben", command=self.daten_eingeben)
+        self.daten_eingeben_btn.pack(fill=tk.X, pady=5)
 
-# Canvas erstellen
-canvas = tk.Canvas(root, yscrollcommand=scrollbar.set)
-canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.daten_anzeigen_btn = tk.Button(main_frame, text="Daten anzeigen", command=self.daten_anzeigen)
+        self.daten_anzeigen_btn.pack(fill=tk.X, pady=5)
 
-# Scrollbar konfigurieren
-scrollbar.config(command=canvas.yview)
+        self.beenden_btn = tk.Button(main_frame, text="Beenden", command=self.quit)
+        self.beenden_btn.pack(fill=tk.X, pady=5)
 
-# Frame für Buttons erstellen
-frame_buttons = tk.Frame(canvas)
+    def daten_eingeben(self):
+        self.eingabe_fenster = tk.Toplevel(self)
+        self.eingabe_fenster.title("Daten eingeben")
+        self.eingabe_fenster.geometry("300x200")
 
-# Canvas mit Frame verbinden
-canvas.create_window((0, 0), window=frame_buttons, anchor='nw')
+        layout = tk.Frame(self.eingabe_fenster)
+        layout.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
 
-# Funktion zum Aktualisieren der Scrollregion
-def on_configure(event):
-    canvas.configure(scrollregion=canvas.bbox('all'))
+        tk.Label(layout, text="Name").pack()
+        self.name_input = tk.Entry(layout)
+        self.name_input.pack(fill=tk.X)
 
-frame_buttons.bind('<Configure>', on_configure)
+        tk.Label(layout, text="Klasse").pack()
+        self.klasse_input = ttk.Combobox(layout)
+        self.curs.execute("SELECT id, name FROM klassen")
+        klassen = self.curs.fetchall()
+        self.klasse_input['values'] = [f"{klasse[1]} (ID: {klasse[0]})" for klasse in klassen]
+        self.klasse_input.pack(fill=tk.X)
 
-# Binden des Mausrads an die Canvas
-canvas.bind_all("<MouseWheel>", on_mouse_wheel)
+        self.speichern_btn = tk.Button(layout, text="Speichern", command=self.speichern_daten)
+        self.speichern_btn.pack(pady=10)
 
-# Buttons für jeden Shortcut im Frame erstellen
-for shortcut, description in additional_shortcuts.items():
-    button = tk.Button(frame_buttons, text=f"{shortcut.upper()}: {description}", command=lambda sc=shortcut: execute_shortcut(sc))
-    button.pack(fill='x', padx=10, pady=5)
+    def speichern_daten(self):
+        name = self.name_input.get()
+        klasse = self.klasse_input.get()
+        
+        if name and klasse:
+            klasse_id = self.get_klasse_id(klasse)
+            if klasse_id is None:
+                self.curs.execute("INSERT INTO klassen (name) VALUES (?)", (klasse.split(" (ID: ")[0],))
+                klasse_id = self.curs.lastrowid
+            
+            self.curs.execute("INSERT INTO schueler (name, klasse_id) VALUES (?, ?)", (name, klasse_id))
+            self.conn.commit()
+            messagebox.showinfo("Erfolg", "Schülerdaten gespeichert.")
+            self.eingabe_fenster.destroy()
+        else:
+            messagebox.showwarning("Fehler", "Bitte alle Felder ausfüllen.")
 
-# Hauptloop starten
-root.mainloop()
+    def get_klasse_id(self, klasse):
+        self.curs.execute("SELECT id FROM klassen WHERE name = ?", (klasse.split(" (ID: ")[0],))
+        row = self.curs.fetchone()
+        return row[0] if row else None
+
+    def daten_anzeigen(self):
+        self.anzeigen_fenster = tk.Toplevel(self)
+        self.anzeigen_fenster.title("Daten anzeigen")
+        self.anzeigen_fenster.geometry("600x400")
+
+        layout = tk.Frame(self.anzeigen_fenster)
+        layout.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
+
+        self.table_widget = ttk.Treeview(layout, columns=("ID", "Name", "Klasse"), show="headings")
+        self.table_widget.heading("ID", text="ID")
+        self.table_widget.heading("Name", text="Name")
+        self.table_widget.heading("Klasse", text="Klasse")
+        self.table_widget.pack(fill=tk.BOTH, expand=True)
+
+        self.curs.execute('''
+            SELECT s.id, s.name, k.name 
+            FROM schueler s
+            LEFT JOIN klassen k ON s.klasse_id = k.id
+        ''')
+        for record in self.curs.fetchall():
+            self.table_widget.insert('', tk.END, values=(record[0], record[1], record[2]))
+
+    def closeEvent(self, event):
+        self.conn.close()
+        event.accept()
+
+if __name__ == "__main__":
+    app = Schuelerverwaltung()
+    app.mainloop()

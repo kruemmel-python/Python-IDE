@@ -28,7 +28,7 @@ class InteractiveConsole(QWidget):
         self.process.start(self.embedded_python_path, [script_path])
 
     def print_output(self):
-        output = self.process.readAllStandardOutput().data().decode('utf-8')
+        output = self.process.readAllStandardOutput().data().decode('utf-8', errors='ignore')
         self.console.appendPlainText(output)
 
     def clear(self):
