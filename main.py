@@ -4,7 +4,6 @@ from PyQt5.QtWidgets import QApplication
 from console import Console
 import check_python
 
-# Konfigurieren des Logging-Moduls
 import logging
 logging.basicConfig(filename='ide.log', level=logging.DEBUG, format='%(asctime)s:%(levelname)s:%(message)s')
 

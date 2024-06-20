@@ -33,8 +33,8 @@ def new_project(console):
                 console.console_output.appendPlainText(f"Failed to create new project: {str(e)}")
 
 def create_new_file(console):
-    if console.project_files.currentItem():
-        current_path = console.project_files.currentItem().text()
+    if console.project_files.currentIndex().isValid():
+        current_path = console.file_system_model.filePath(console.project_files.currentIndex())
         if os.path.isdir(current_path):
             directory = current_path
         else:
@@ -49,13 +49,13 @@ def create_new_file(console):
             with open(new_file_path, 'w', encoding='utf-8') as new_file:
                 new_file.write("")
             console.console_output.appendPlainText(f"Neue Datei: {new_file_path}")
-            console.project_files.addItem(new_file_path)
+            console.file_system_model.refresh(console.file_system_model.index(directory))
         except Exception as e:
             console.console_output.appendPlainText(f"Fehler: Keine neue Datei erstellt: {str(e)}")
 
 def create_new_folder(console):
-    if console.project_files.currentItem():
-        current_path = console.project_files.currentItem().text()
+    if console.project_files.currentIndex().isValid():
+        current_path = console.file_system_model.filePath(console.project_files.currentIndex())
         if os.path.isdir(current_path):
             directory = current_path
         else:
@@ -69,25 +69,24 @@ def create_new_folder(console):
         try:
             os.makedirs(new_folder_path)
             console.console_output.appendPlainText(f"Neuer Ordner erstellt: {new_folder_path}")
-            console.project_files.addItem(new_folder_path)
+            console.file_system_model.refresh(console.file_system_model.index(directory))
         except Exception as e:
             console.console_output.appendPlainText(f"Fehler; Es konnte kein Ordner erstellt werden: {str(e)}")
 
 def delete_item(console):
-    if console.project_files.currentItem():
-        item_path = console.project_files.currentItem().text()
+    if console.project_files.currentIndex().isValid():
+        item_path = console.file_system_model.filePath(console.project_files.currentIndex())
         try:
             if os.path.isdir(item_path):
                 shutil.rmtree(item_path)
             else:
                 os.remove(item_path)
             console.console_output.appendPlainText(f"Markiertes Löschen: {item_path}")
-            console.project_files.takeItem(console.project_files.currentRow())
+            console.file_system_model.refresh(console.file_system_model.index(os.path.dirname(item_path)))
         except Exception as e:
             console.console_output.appendPlainText(f"Fehler Löschen erfolglos: {str(e)}")
 
-def load_file(console, item):
-    file_path = item.text()
+def load_file(console, file_path):
     try:
         with open(file_path, 'r', encoding='utf-8') as file:
             console.code_editor.setPlainText(file.read())
@@ -96,6 +95,7 @@ def load_file(console, item):
         console.update_todo_list()
     except Exception as e:
         console.console_output.appendPlainText(f"konnte Datei nicht laden: {file_path}\n{str(e)}")
+
 
 def save_file(console):
     if console.code_editor.current_file:

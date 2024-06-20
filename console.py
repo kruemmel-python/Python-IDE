@@ -1,18 +1,19 @@
+# console.py
 import os
 import sys
 import json
 import subprocess
 from PyQt5.QtWidgets import (
-    QMainWindow, QVBoxLayout, QPlainTextEdit, QMenuBar, QAction, QWidget,
-    QListWidget, QMenu, QFileDialog, QMessageBox, QDockWidget, QInputDialog
+    QMainWindow, QVBoxLayout, QPlainTextEdit, QMenuBar, QAction, QWidget, QListWidget,
+    QFileDialog, QMenu, QMessageBox, QDockWidget, QInputDialog, QTreeView, QFileSystemModel
 )
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QModelIndex
 import logging
 from pathlib import Path
 from layout import CustomPalette
 from code_editor import CodeEditor
 import info
-import shortcuts  # Import the shortcuts module
+import shortcuts
 from file_operations import (
     open_project, new_project, create_new_file, create_new_folder,
     delete_item, load_file, save_file, install_package, update_package,
@@ -21,7 +22,9 @@ from file_operations import (
 from todo_list import update_todo_list, goto_todo
 from interactive_console import InteractiveConsole
 from process_manager import create_exe
-from translator import translate_text  # Import the translator module
+from plugin_manager import PluginManager
+from plugin_interface import PluginInterface
+from translator import translate_text
 
 class Console(QMainWindow):
     def __init__(self, embedded_python_path):
@@ -29,18 +32,42 @@ class Console(QMainWindow):
         logging.debug("Console Initialisierung beginnt")
         self.embedded_python_path = embedded_python_path
         self.project_dir = None
+        self.plugin_manager = PluginManager(self)
         self.initUI()
-        self.load_settings()  # Sicherstellen, dass die Einstellungen nach der UI-Initialisierung geladen werden
+        self.load_settings()
+        self.plugin_manager.load_plugins()
+        self.add_plugin_actions(self.plugin_menu)
         logging.debug("Console Initialisierung abgeschlossen")
+
+    def create_action(self, name, function, shortcut=None):
+        action = QAction(name, self)
+        action.triggered.connect(function)
+        if shortcut:
+            action.setShortcut(shortcut)
+        return action
+
+    def add_action_to_menu(self, menu_name, action):
+        menu = self.findChild(QMenu, menu_name)
+        if menu:
+            menu.addAction(action)
+
+    def remove_action_from_menu(self, menu_name, action):
+        menu = self.findChild(QMenu, menu_name)
+        if menu:
+            menu.removeAction(action)
 
     def initUI(self):
         logging.debug("UI Initialisierung beginnt")
         CustomPalette.set_dark_palette(self)
 
-        self.project_files = QListWidget(self)
+        self.project_files = QTreeView(self)
         self.project_files.setContextMenuPolicy(Qt.CustomContextMenu)
         self.project_files.customContextMenuRequested.connect(self.open_context_menu)
-        self.project_files.itemDoubleClicked.connect(self.load_file)
+        self.project_files.doubleClicked.connect(self.load_file)
+
+        self.file_system_model = QFileSystemModel(self.project_files)
+        self.file_system_model.setRootPath('')
+        self.project_files.setModel(self.file_system_model)
         
         self.code_editor = CodeEditor(console=self)
         self.console_output = QPlainTextEdit(self)
@@ -59,7 +86,9 @@ class Console(QMainWindow):
         menu_bar = self.menuBar()
         menu_bar.setStyleSheet("QMenuBar { background-color: #353535; color: #FFFFFF; }")
 
-        run_menu = menu_bar.addMenu('Code')
+        run_menu = QMenu('Code', self)
+        run_menu.setObjectName('Code')
+        menu_bar.addMenu(run_menu)
         create_exe_menu = menu_bar.addMenu('Programm erstellen')
         clear_output_menu = menu_bar.addMenu('Konsole')
         info_menu = menu_bar.addMenu('Info')
@@ -67,6 +96,7 @@ class Console(QMainWindow):
         project_menu = menu_bar.addMenu('Projekt')
         view_menu = menu_bar.addMenu('Ansicht')
         settings_menu = menu_bar.addMenu('Einstellungen')
+        self.plugin_menu = menu_bar.addMenu('Plugins')
         open_project_menu = project_menu.addMenu('Projekt öffnen')
         new_project_menu = project_menu.addMenu('Projekt erstellen')
         save_file_menu = menu_bar.addMenu('Speichern')
@@ -78,9 +108,9 @@ class Console(QMainWindow):
         create_exe_action = QAction('erstellen', self)
         clear_output_action = QAction('Ausgabe löschen', self)
         clear_interactive_console_action = QAction('Interaktive Konsole löschen', self)
-        translate_action = QAction('Text übersetzen', self)  # Add action for translation
+        translate_action = QAction('Text übersetzen', self)
         info_action = QAction('Info', self)
-        shortcuts_action = QAction('Tastenkürzel', self)  # Action for showing shortcuts
+        shortcuts_action = QAction('Tastenkürzel', self)
         install_package_action = QAction('Neues Paket installieren', self)
         update_package_action = QAction('Paket aktualisieren', self)
         uninstall_package_action = QAction('Paket deinstallieren', self)
@@ -101,10 +131,10 @@ class Console(QMainWindow):
         run_menu.addAction(add_snippet_action)
         create_exe_menu.addAction(create_exe_action)
         clear_output_menu.addAction(clear_output_action)
-        clear_output_menu.addAction(clear_interactive_console_action)  # Add action to clear interactive console
+        clear_output_menu.addAction(clear_interactive_console_action)
         info_menu.addAction(info_action)
-        info_menu.addAction(shortcuts_action)  # Add shortcuts action to info menu
-        info_menu.addAction(translate_action)  # Add translate action to info menu
+        info_menu.addAction(shortcuts_action)
+        info_menu.addAction(translate_action)
         library_menu.addAction(install_package_action)
         library_menu.addAction(update_package_action)
         library_menu.addAction(uninstall_package_action)
@@ -124,10 +154,10 @@ class Console(QMainWindow):
         add_snippet_action.triggered.connect(self.add_snippet)
         create_exe_action.triggered.connect(lambda: create_exe(self))
         clear_output_action.triggered.connect(self.clear_output)
-        clear_interactive_console_action.triggered.connect(self.clear_interactive_console)  # Connect action to clear interactive console
-        translate_action.triggered.connect(self.translate_selected_text)  # Connect action to translate text
+        clear_interactive_console_action.triggered.connect(self.clear_interactive_console)
+        translate_action.triggered.connect(self.translate_selected_text)
         info_action.triggered.connect(info.show_info)
-        shortcuts_action.triggered.connect(shortcuts.show_shortcuts)  # Connect action to show shortcuts
+        shortcuts_action.triggered.connect(shortcuts.show_shortcuts)
         install_package_action.triggered.connect(lambda: install_package(self))
         update_package_action.triggered.connect(lambda: update_package(self))
         uninstall_package_action.triggered.connect(lambda: uninstall_package(self))
@@ -188,14 +218,10 @@ class Console(QMainWindow):
         logging.debug("Projekt wird geöffnet")
         project_dir = QFileDialog.getExistingDirectory(self, 'Open Project', os.getcwd())
         if project_dir:
+            self.file_system_model.setRootPath(project_dir)
+            self.project_files.setRootIndex(self.file_system_model.index(project_dir))
             self.project_dir = project_dir
             sys.path.insert(0, project_dir)
-            self.project_files.clear()
-            for root, _, files in os.walk(project_dir):
-                for file in files:
-                    if file.endswith('.py'):
-                        file_path = os.path.join(root, file)
-                        self.project_files.addItem(file_path)
             logging.debug(f"Projektverzeichnis gesetzt: {project_dir}")
 
     def new_project(self):
@@ -203,8 +229,8 @@ class Console(QMainWindow):
         new_project(self)
 
     def open_context_menu(self, position):
-        indexes = self.project_files.selectedIndexes()
-        if len(indexes) > 0:
+        index = self.project_files.indexAt(position)
+        if index.isValid():
             context_menu = QMenu(self)
             new_file_action = context_menu.addAction("New File")
             new_folder_action = context_menu.addAction("New Folder")
@@ -221,9 +247,10 @@ class Console(QMainWindow):
                 logging.debug("Datei/Ordner wird gelöscht")
                 delete_item(self)
 
-    def load_file(self, item):
-        logging.debug(f"Datei wird geladen: {item.text()}")
-        load_file(self, item)
+    def load_file(self, index: QModelIndex):
+        file_path = self.file_system_model.filePath(index)
+        logging.debug(f"Datei wird geladen: {file_path}")
+        load_file(self, file_path)
 
     def save_file(self):
         logging.debug("Datei wird gespeichert")
@@ -321,12 +348,12 @@ class Console(QMainWindow):
     def add_snippet(self):
         snippet_name, ok = QInputDialog.getText(self, 'Snippet hinzufügen', 'Snippet Name:')
         if ok and snippet_name:
-            code = self.code_editor.toPlainText()
+            code = self.ide.code_editor.toPlainText()
             snippets_dir = "snippets"
             os.makedirs(snippets_dir, exist_ok=True)
             with open(os.path.join(snippets_dir, f"{snippet_name}.py"), "w", encoding="utf-8") as file:
                 file.write(code)
-            self.console_output.appendPlainText(f"Snippet '{snippet_name}' gespeichert.")
+            self.ide.console_output.appendPlainText(f"Snippet '{snippet_name}' gespeichert.")
             logging.debug(f"Snippet '{snippet_name}' gespeichert")
 
     def translate_selected_text(self):
@@ -350,6 +377,16 @@ class Console(QMainWindow):
         translated_text = translate_text(selected_text)
         self.console_output.appendPlainText(f"Original: {selected_text}\nÜbersetzt: {translated_text}")
         QMessageBox.information(self, "Übersetzung", f"Übersetzter Text:\n{translated_text}")
+
+    def add_plugin_actions(self, plugin_menu):
+        plugins = self.plugin_manager.get_plugins()
+        for plugin_name, plugin_instance in plugins:
+            action = QAction(f"{plugin_name} aktivieren/deaktivieren", self)
+            action.setCheckable(True)
+            action.setChecked(self.plugin_manager.is_plugin_active(plugin_name))
+            action.toggled.connect(lambda checked, name=plugin_name: self.plugin_manager.toggle_plugin(name))
+            plugin_menu.addAction(action)
+
 
 if __name__ == '__main__':
     from PyQt5.QtWidgets import QApplication
