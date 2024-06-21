@@ -15278,3 +15278,271 @@
 2024-06-21 00:18:19,204:DEBUG:Script gespeichert: C:\Python_IDE\temp_script.py
 2024-06-21 00:20:45,283:DEBUG:Einstellungen gespeichert
 2024-06-21 00:20:45,283:DEBUG:Programm geschlossen und log Datei gelöscht
+2024-06-21 08:16:43,392:DEBUG:Anwendung wird gestartet
+2024-06-21 08:16:43,402:DEBUG:Embedded Python Path: c:\users\ralfk\appdata\local\programs\python\python312\python.exe
+2024-06-21 08:16:43,405:DEBUG:Console Initialisierung beginnt
+2024-06-21 08:16:43,405:DEBUG:UI Initialisierung beginnt
+2024-06-21 08:16:43,727:DEBUG:Dock Widgets werden eingerichtet
+2024-06-21 08:16:43,740:DEBUG:UI Initialisierung abgeschlossen
+2024-06-21 08:16:43,776:DEBUG:Einstellungen geladen
+2024-06-21 08:16:43,784:INFO:Plugin AutoInstallPlugin loaded from plugins\auto_install_plugin - Kopie.py
+2024-06-21 08:16:43,837:INFO:Plugin AutoInstallPlugin loaded from plugins\auto_install_plugin.py
+2024-06-21 08:16:43,837:INFO:Plugin CodeFormatterPlugin loaded from plugins\Code_formatieren.py
+2024-06-21 08:16:43,837:INFO:Plugin RefactorPlugin loaded from plugins\Code_Refactoring.py
+2024-06-21 08:16:43,837:INFO:Plugin DebuggerPlugin loaded from plugins\debugger_plugin.py
+2024-06-21 08:16:43,837:INFO:Plugin DocumentationGeneratorPlugin loaded from plugins\Dokumentation_generieren.py
+2024-06-21 08:16:43,837:INFO:Plugin VersionControlPlugin loaded from plugins\Git_Commit.py
+2024-06-21 08:16:43,837:INFO:Plugin LiveCodingPlugin loaded from plugins\live_coding_plugin.py
+2024-06-21 08:16:43,837:INFO:Plugin LiveCodingPlugin loaded from plugins\Live_Coding_Shell.py
+2024-06-21 08:16:43,837:INFO:Plugin ProfilingPlugin loaded from plugins\Profiling_Results.py
+2024-06-21 08:16:43,921:INFO:Plugin RefactorPlugin loaded from plugins\refactor_plugin.py
+2024-06-21 08:16:43,927:INFO:Plugin StaticCodeAnalysisPlugin loaded from plugins\static_code_analysis_plugin (2).py
+2024-06-21 08:16:43,927:INFO:Plugin UnitTestPlugin loaded from plugins\unit_test_plugin.py
+2024-06-21 08:16:43,927:DEBUG:Console Initialisierung abgeschlossen
+2024-06-21 08:16:43,964:DEBUG:Hauptfenster wird angezeigt
+2024-06-21 08:16:55,061:INFO:Plugin AutoInstallPlugin initialized
+2024-06-21 08:16:55,064:DEBUG:Starting new HTTPS connection (1): pypi.org:443
+2024-06-21 08:16:55,449:DEBUG:https://pypi.org:443 "GET /simple/ HTTP/1.1" 200 4592826
+2024-06-21 08:17:02,906:DEBUG:Einstellungen gespeichert
+2024-06-21 08:17:02,953:DEBUG:Programm geschlossen und log Datei gelöscht
+2024-06-21 08:22:09,569:DEBUG:Anwendung wird gestartet
+2024-06-21 08:22:09,582:DEBUG:Embedded Python Path: c:\users\ralfk\appdata\local\programs\python\python312\python.exe
+2024-06-21 08:22:09,582:DEBUG:Console Initialisierung beginnt
+2024-06-21 08:22:09,582:DEBUG:UI Initialisierung beginnt
+2024-06-21 08:22:09,899:DEBUG:Dock Widgets werden eingerichtet
+2024-06-21 08:22:09,912:DEBUG:UI Initialisierung abgeschlossen
+2024-06-21 08:22:09,952:DEBUG:Einstellungen geladen
+2024-06-21 08:22:09,954:INFO:Plugin AutoInstallPlugin loaded from plugins\auto_install_plugin - Kopie.py
+2024-06-21 08:22:10,011:INFO:Plugin AutoInstallPlugin loaded from plugins\auto_install_plugin.py
+2024-06-21 08:22:10,012:INFO:Plugin CodeFormatterPlugin loaded from plugins\Code_formatieren.py
+2024-06-21 08:22:10,012:INFO:Plugin RefactorPlugin loaded from plugins\Code_Refactoring.py
+2024-06-21 08:22:10,012:INFO:Plugin DebuggerPlugin loaded from plugins\debugger_plugin.py
+2024-06-21 08:22:10,013:INFO:Plugin DocumentationGeneratorPlugin loaded from plugins\Dokumentation_generieren.py
+2024-06-21 08:22:10,013:INFO:Plugin VersionControlPlugin loaded from plugins\Git_Commit.py
+2024-06-21 08:22:10,014:INFO:Plugin LiveCodingPlugin loaded from plugins\live_coding_plugin.py
+2024-06-21 08:22:10,015:INFO:Plugin LiveCodingPlugin loaded from plugins\Live_Coding_Shell.py
+2024-06-21 08:22:10,019:INFO:Plugin ProfilingPlugin loaded from plugins\Profiling_Results.py
+2024-06-21 08:22:10,020:INFO:Plugin RefactorPlugin loaded from plugins\refactor_plugin.py
+2024-06-21 08:22:10,020:INFO:Plugin StaticCodeAnalysisPlugin loaded from plugins\static_code_analysis_plugin (2).py
+2024-06-21 08:22:10,020:INFO:Plugin UnitTestPlugin loaded from plugins\unit_test_plugin.py
+2024-06-21 08:22:10,020:DEBUG:Console Initialisierung abgeschlossen
+2024-06-21 08:22:10,057:DEBUG:Hauptfenster wird angezeigt
+2024-06-21 08:23:30,810:DEBUG:Anwendung wird gestartet
+2024-06-21 08:23:30,822:DEBUG:Embedded Python Path: c:\users\ralfk\appdata\local\programs\python\python312\python.exe
+2024-06-21 08:23:30,823:DEBUG:Console Initialisierung beginnt
+2024-06-21 08:23:30,823:DEBUG:UI Initialisierung beginnt
+2024-06-21 08:23:31,199:DEBUG:Dock Widgets werden eingerichtet
+2024-06-21 08:23:31,212:DEBUG:UI Initialisierung abgeschlossen
+2024-06-21 08:23:31,254:DEBUG:Einstellungen geladen
+2024-06-21 08:23:31,256:INFO:Plugin AutoInstallPlugin loaded from plugins\auto_install_plugin - Kopie.py
+2024-06-21 08:23:31,314:INFO:Plugin AutoInstallPlugin loaded from plugins\auto_install_plugin.py
+2024-06-21 08:23:31,316:INFO:Plugin CodeFormatterPlugin loaded from plugins\Code_formatieren.py
+2024-06-21 08:23:31,316:INFO:Plugin RefactorPlugin loaded from plugins\Code_Refactoring.py
+2024-06-21 08:23:31,317:INFO:Plugin DebuggerPlugin loaded from plugins\debugger_plugin.py
+2024-06-21 08:23:31,317:INFO:Plugin DocumentationGeneratorPlugin loaded from plugins\Dokumentation_generieren.py
+2024-06-21 08:23:31,317:INFO:Plugin VersionControlPlugin loaded from plugins\Git_Commit.py
+2024-06-21 08:23:31,319:INFO:Plugin LiveCodingPlugin loaded from plugins\live_coding_plugin.py
+2024-06-21 08:23:31,319:INFO:Plugin LiveCodingPlugin loaded from plugins\Live_Coding_Shell.py
+2024-06-21 08:23:31,324:INFO:Plugin ProfilingPlugin loaded from plugins\Profiling_Results.py
+2024-06-21 08:23:31,325:INFO:Plugin RefactorPlugin loaded from plugins\refactor_plugin.py
+2024-06-21 08:23:31,325:INFO:Plugin StaticCodeAnalysisPlugin loaded from plugins\static_code_analysis_plugin (2).py
+2024-06-21 08:23:31,326:INFO:Plugin UnitTestPlugin loaded from plugins\unit_test_plugin.py
+2024-06-21 08:23:31,326:DEBUG:Console Initialisierung abgeschlossen
+2024-06-21 08:23:31,364:DEBUG:Hauptfenster wird angezeigt
+2024-06-21 08:26:23,942:DEBUG:Anwendung wird gestartet
+2024-06-21 08:26:23,954:DEBUG:Embedded Python Path: c:\users\ralfk\appdata\local\programs\python\python312\python.exe
+2024-06-21 08:26:23,954:DEBUG:Console Initialisierung beginnt
+2024-06-21 08:26:23,954:DEBUG:UI Initialisierung beginnt
+2024-06-21 08:26:24,351:DEBUG:Dock Widgets werden eingerichtet
+2024-06-21 08:26:24,364:DEBUG:UI Initialisierung abgeschlossen
+2024-06-21 08:26:24,406:DEBUG:Einstellungen geladen
+2024-06-21 08:26:24,408:INFO:Plugin AutoInstallPlugin loaded from plugins\auto_install_plugin - Kopie.py
+2024-06-21 08:26:24,466:INFO:Plugin AutoInstallPlugin loaded from plugins\auto_install_plugin.py
+2024-06-21 08:26:24,467:INFO:Plugin CodeFormatterPlugin loaded from plugins\Code_formatieren.py
+2024-06-21 08:26:24,467:INFO:Plugin RefactorPlugin loaded from plugins\Code_Refactoring.py
+2024-06-21 08:26:24,467:INFO:Plugin DebuggerPlugin loaded from plugins\debugger_plugin.py
+2024-06-21 08:26:24,469:INFO:Plugin DocumentationGeneratorPlugin loaded from plugins\Dokumentation_generieren.py
+2024-06-21 08:26:24,469:INFO:Plugin VersionControlPlugin loaded from plugins\Git_Commit.py
+2024-06-21 08:26:24,470:INFO:Plugin LiveCodingPlugin loaded from plugins\live_coding_plugin.py
+2024-06-21 08:26:24,471:INFO:Plugin LiveCodingPlugin loaded from plugins\Live_Coding_Shell.py
+2024-06-21 08:26:24,475:INFO:Plugin ProfilingPlugin loaded from plugins\Profiling_Results.py
+2024-06-21 08:26:24,476:INFO:Plugin RefactorPlugin loaded from plugins\refactor_plugin.py
+2024-06-21 08:26:24,476:INFO:Plugin StaticCodeAnalysisPlugin loaded from plugins\static_code_analysis_plugin (2).py
+2024-06-21 08:26:24,476:INFO:Plugin UnitTestPlugin loaded from plugins\unit_test_plugin.py
+2024-06-21 08:26:24,476:DEBUG:Console Initialisierung abgeschlossen
+2024-06-21 08:26:24,519:DEBUG:Hauptfenster wird angezeigt
+2024-06-21 08:27:28,281:DEBUG:Anwendung wird gestartet
+2024-06-21 08:27:28,293:DEBUG:Embedded Python Path: c:\users\ralfk\appdata\local\programs\python\python312\python.exe
+2024-06-21 08:27:28,294:DEBUG:Console Initialisierung beginnt
+2024-06-21 08:27:28,294:DEBUG:UI Initialisierung beginnt
+2024-06-21 08:27:28,610:DEBUG:Dock Widgets werden eingerichtet
+2024-06-21 08:27:28,623:DEBUG:UI Initialisierung abgeschlossen
+2024-06-21 08:27:28,664:DEBUG:Einstellungen geladen
+2024-06-21 08:27:28,666:INFO:Plugin AutoInstallPlugin loaded from plugins\auto_install_plugin - Kopie.py
+2024-06-21 08:27:28,722:INFO:Plugin AutoInstallPlugin loaded from plugins\auto_install_plugin.py
+2024-06-21 08:27:28,722:INFO:Plugin CodeFormatterPlugin loaded from plugins\Code_formatieren.py
+2024-06-21 08:27:28,723:INFO:Plugin RefactorPlugin loaded from plugins\Code_Refactoring.py
+2024-06-21 08:27:28,723:INFO:Plugin DebuggerPlugin loaded from plugins\debugger_plugin.py
+2024-06-21 08:27:28,724:INFO:Plugin DocumentationGeneratorPlugin loaded from plugins\Dokumentation_generieren.py
+2024-06-21 08:27:28,724:INFO:Plugin VersionControlPlugin loaded from plugins\Git_Commit.py
+2024-06-21 08:27:28,726:INFO:Plugin LiveCodingPlugin loaded from plugins\live_coding_plugin.py
+2024-06-21 08:27:28,726:INFO:Plugin LiveCodingPlugin loaded from plugins\Live_Coding_Shell.py
+2024-06-21 08:27:28,730:INFO:Plugin ProfilingPlugin loaded from plugins\Profiling_Results.py
+2024-06-21 08:27:28,731:INFO:Plugin RefactorPlugin loaded from plugins\refactor_plugin.py
+2024-06-21 08:27:28,731:INFO:Plugin StaticCodeAnalysisPlugin loaded from plugins\static_code_analysis_plugin (2).py
+2024-06-21 08:27:28,731:INFO:Plugin UnitTestPlugin loaded from plugins\unit_test_plugin.py
+2024-06-21 08:27:28,731:DEBUG:Console Initialisierung abgeschlossen
+2024-06-21 08:27:28,770:DEBUG:Hauptfenster wird angezeigt
+2024-06-21 08:28:44,244:DEBUG:Anwendung wird gestartet
+2024-06-21 08:28:44,256:DEBUG:Embedded Python Path: c:\users\ralfk\appdata\local\programs\python\python312\python.exe
+2024-06-21 08:28:44,257:DEBUG:Console Initialisierung beginnt
+2024-06-21 08:28:44,257:DEBUG:UI Initialisierung beginnt
+2024-06-21 08:28:44,661:DEBUG:Dock Widgets werden eingerichtet
+2024-06-21 08:28:44,675:DEBUG:UI Initialisierung abgeschlossen
+2024-06-21 08:28:44,718:DEBUG:Einstellungen geladen
+2024-06-21 08:28:44,720:INFO:Plugin AutoInstallPlugin loaded from plugins\auto_install_plugin - Kopie.py
+2024-06-21 08:28:44,781:INFO:Plugin AutoInstallPlugin loaded from plugins\auto_install_plugin.py
+2024-06-21 08:28:44,782:INFO:Plugin CodeFormatterPlugin loaded from plugins\Code_formatieren.py
+2024-06-21 08:28:44,782:INFO:Plugin RefactorPlugin loaded from plugins\Code_Refactoring.py
+2024-06-21 08:28:44,782:INFO:Plugin DebuggerPlugin loaded from plugins\debugger_plugin.py
+2024-06-21 08:28:44,784:INFO:Plugin DocumentationGeneratorPlugin loaded from plugins\Dokumentation_generieren.py
+2024-06-21 08:28:44,784:INFO:Plugin VersionControlPlugin loaded from plugins\Git_Commit.py
+2024-06-21 08:28:44,786:INFO:Plugin LiveCodingPlugin loaded from plugins\live_coding_plugin.py
+2024-06-21 08:28:44,787:INFO:Plugin LiveCodingPlugin loaded from plugins\Live_Coding_Shell.py
+2024-06-21 08:28:44,791:INFO:Plugin ProfilingPlugin loaded from plugins\Profiling_Results.py
+2024-06-21 08:28:44,791:INFO:Plugin RefactorPlugin loaded from plugins\refactor_plugin.py
+2024-06-21 08:28:44,792:INFO:Plugin StaticCodeAnalysisPlugin loaded from plugins\static_code_analysis_plugin (2).py
+2024-06-21 08:28:44,792:INFO:Plugin UnitTestPlugin loaded from plugins\unit_test_plugin.py
+2024-06-21 08:28:44,792:DEBUG:Console Initialisierung abgeschlossen
+2024-06-21 08:28:44,833:DEBUG:Hauptfenster wird angezeigt
+2024-06-21 08:28:54,894:DEBUG:Einstellungen gespeichert
+2024-06-21 08:29:07,617:DEBUG:Einstellungen gespeichert
+2024-06-21 08:29:36,865:DEBUG:Einstellungen gespeichert
+2024-06-21 08:30:06,390:DEBUG:Einstellungen gespeichert
+2024-06-21 08:30:52,241:DEBUG:Einstellungen gespeichert
+2024-06-21 08:31:06,629:DEBUG:Einstellungen gespeichert
+2024-06-21 08:31:06,646:DEBUG:Programm geschlossen und log Datei gelöscht
+2024-06-21 08:31:12,484:DEBUG:Anwendung wird gestartet
+2024-06-21 08:31:12,496:DEBUG:Embedded Python Path: c:\users\ralfk\appdata\local\programs\python\python312\python.exe
+2024-06-21 08:31:12,496:DEBUG:Console Initialisierung beginnt
+2024-06-21 08:31:12,496:DEBUG:UI Initialisierung beginnt
+2024-06-21 08:31:12,799:DEBUG:Dock Widgets werden eingerichtet
+2024-06-21 08:31:12,819:DEBUG:UI Initialisierung abgeschlossen
+2024-06-21 08:31:12,868:DEBUG:Einstellungen geladen
+2024-06-21 08:31:12,869:INFO:Plugin AutoInstallPlugin loaded from plugins\auto_install_plugin - Kopie.py
+2024-06-21 08:31:12,924:INFO:Plugin AutoInstallPlugin loaded from plugins\auto_install_plugin.py
+2024-06-21 08:31:12,926:INFO:Plugin CodeFormatterPlugin loaded from plugins\Code_formatieren.py
+2024-06-21 08:31:12,926:INFO:Plugin RefactorPlugin loaded from plugins\Code_Refactoring.py
+2024-06-21 08:31:12,926:INFO:Plugin DebuggerPlugin loaded from plugins\debugger_plugin.py
+2024-06-21 08:31:12,926:INFO:Plugin DocumentationGeneratorPlugin loaded from plugins\Dokumentation_generieren.py
+2024-06-21 08:31:12,926:INFO:Plugin VersionControlPlugin loaded from plugins\Git_Commit.py
+2024-06-21 08:31:12,930:INFO:Plugin LiveCodingPlugin loaded from plugins\live_coding_plugin.py
+2024-06-21 08:31:12,930:INFO:Plugin LiveCodingPlugin loaded from plugins\Live_Coding_Shell.py
+2024-06-21 08:31:12,930:INFO:Plugin ProfilingPlugin loaded from plugins\Profiling_Results.py
+2024-06-21 08:31:12,930:INFO:Plugin RefactorPlugin loaded from plugins\refactor_plugin.py
+2024-06-21 08:31:12,930:INFO:Plugin StaticCodeAnalysisPlugin loaded from plugins\static_code_analysis_plugin (2).py
+2024-06-21 08:31:12,930:INFO:Plugin UnitTestPlugin loaded from plugins\unit_test_plugin.py
+2024-06-21 08:31:12,930:DEBUG:Console Initialisierung abgeschlossen
+2024-06-21 08:31:12,971:DEBUG:Hauptfenster wird angezeigt
+2024-06-21 08:31:21,532:DEBUG:Einstellungen gespeichert
+2024-06-21 08:31:21,539:DEBUG:Programm geschlossen und log Datei gelöscht
+2024-06-21 08:31:23,827:DEBUG:Anwendung wird gestartet
+2024-06-21 08:31:23,838:DEBUG:Embedded Python Path: c:\users\ralfk\appdata\local\programs\python\python312\python.exe
+2024-06-21 08:31:23,838:DEBUG:Console Initialisierung beginnt
+2024-06-21 08:31:23,838:DEBUG:UI Initialisierung beginnt
+2024-06-21 08:31:24,248:DEBUG:Dock Widgets werden eingerichtet
+2024-06-21 08:31:24,260:DEBUG:UI Initialisierung abgeschlossen
+2024-06-21 08:31:24,308:DEBUG:Einstellungen geladen
+2024-06-21 08:31:24,310:INFO:Plugin AutoInstallPlugin loaded from plugins\auto_install_plugin - Kopie.py
+2024-06-21 08:31:24,366:INFO:Plugin AutoInstallPlugin loaded from plugins\auto_install_plugin.py
+2024-06-21 08:31:24,366:INFO:Plugin CodeFormatterPlugin loaded from plugins\Code_formatieren.py
+2024-06-21 08:31:24,367:INFO:Plugin RefactorPlugin loaded from plugins\Code_Refactoring.py
+2024-06-21 08:31:24,367:INFO:Plugin DebuggerPlugin loaded from plugins\debugger_plugin.py
+2024-06-21 08:31:24,368:INFO:Plugin DocumentationGeneratorPlugin loaded from plugins\Dokumentation_generieren.py
+2024-06-21 08:31:24,368:INFO:Plugin VersionControlPlugin loaded from plugins\Git_Commit.py
+2024-06-21 08:31:24,370:INFO:Plugin LiveCodingPlugin loaded from plugins\live_coding_plugin.py
+2024-06-21 08:31:24,370:INFO:Plugin LiveCodingPlugin loaded from plugins\Live_Coding_Shell.py
+2024-06-21 08:31:24,374:INFO:Plugin ProfilingPlugin loaded from plugins\Profiling_Results.py
+2024-06-21 08:31:24,375:INFO:Plugin RefactorPlugin loaded from plugins\refactor_plugin.py
+2024-06-21 08:31:24,375:INFO:Plugin StaticCodeAnalysisPlugin loaded from plugins\static_code_analysis_plugin (2).py
+2024-06-21 08:31:24,375:INFO:Plugin UnitTestPlugin loaded from plugins\unit_test_plugin.py
+2024-06-21 08:31:24,376:DEBUG:Console Initialisierung abgeschlossen
+2024-06-21 08:31:24,416:DEBUG:Hauptfenster wird angezeigt
+2024-06-21 08:31:34,877:DEBUG:Einstellungen gespeichert
+2024-06-21 08:31:34,887:DEBUG:Programm geschlossen und log Datei gelöscht
+2024-06-21 08:31:37,551:DEBUG:Anwendung wird gestartet
+2024-06-21 08:31:37,562:DEBUG:Embedded Python Path: c:\users\ralfk\appdata\local\programs\python\python312\python.exe
+2024-06-21 08:31:37,563:DEBUG:Console Initialisierung beginnt
+2024-06-21 08:31:37,563:DEBUG:UI Initialisierung beginnt
+2024-06-21 08:31:37,879:DEBUG:Dock Widgets werden eingerichtet
+2024-06-21 08:31:37,892:DEBUG:UI Initialisierung abgeschlossen
+2024-06-21 08:31:37,937:DEBUG:Einstellungen geladen
+2024-06-21 08:31:37,940:INFO:Plugin AutoInstallPlugin loaded from plugins\auto_install_plugin - Kopie.py
+2024-06-21 08:31:37,996:INFO:Plugin AutoInstallPlugin loaded from plugins\auto_install_plugin.py
+2024-06-21 08:31:37,997:INFO:Plugin CodeFormatterPlugin loaded from plugins\Code_formatieren.py
+2024-06-21 08:31:37,997:INFO:Plugin RefactorPlugin loaded from plugins\Code_Refactoring.py
+2024-06-21 08:31:37,998:INFO:Plugin DebuggerPlugin loaded from plugins\debugger_plugin.py
+2024-06-21 08:31:37,998:INFO:Plugin DocumentationGeneratorPlugin loaded from plugins\Dokumentation_generieren.py
+2024-06-21 08:31:37,998:INFO:Plugin VersionControlPlugin loaded from plugins\Git_Commit.py
+2024-06-21 08:31:38,000:INFO:Plugin LiveCodingPlugin loaded from plugins\live_coding_plugin.py
+2024-06-21 08:31:38,000:INFO:Plugin LiveCodingPlugin loaded from plugins\Live_Coding_Shell.py
+2024-06-21 08:31:38,004:INFO:Plugin ProfilingPlugin loaded from plugins\Profiling_Results.py
+2024-06-21 08:31:38,005:INFO:Plugin RefactorPlugin loaded from plugins\refactor_plugin.py
+2024-06-21 08:31:38,005:INFO:Plugin StaticCodeAnalysisPlugin loaded from plugins\static_code_analysis_plugin (2).py
+2024-06-21 08:31:38,005:INFO:Plugin UnitTestPlugin loaded from plugins\unit_test_plugin.py
+2024-06-21 08:31:38,006:DEBUG:Console Initialisierung abgeschlossen
+2024-06-21 08:31:38,043:DEBUG:Hauptfenster wird angezeigt
+2024-06-21 08:40:07,660:DEBUG:Einstellungen gespeichert
+2024-06-21 08:40:07,672:DEBUG:Programm geschlossen und log Datei gelöscht
+2024-06-21 08:40:26,609:DEBUG:Anwendung wird gestartet
+2024-06-21 08:40:26,621:DEBUG:Embedded Python Path: c:\users\ralfk\appdata\local\programs\python\python312\python.exe
+2024-06-21 08:40:26,621:DEBUG:Console Initialisierung beginnt
+2024-06-21 08:40:26,621:DEBUG:UI Initialisierung beginnt
+2024-06-21 08:40:27,014:DEBUG:Dock Widgets werden eingerichtet
+2024-06-21 08:40:27,027:DEBUG:UI Initialisierung abgeschlossen
+2024-06-21 08:40:27,070:DEBUG:Einstellungen geladen
+2024-06-21 08:40:27,070:DEBUG:Standard-Dock-Positionen gespeichert
+2024-06-21 08:40:27,071:INFO:Plugin AutoInstallPlugin loaded from plugins\auto_install_plugin - Kopie.py
+2024-06-21 08:40:27,128:INFO:Plugin AutoInstallPlugin loaded from plugins\auto_install_plugin.py
+2024-06-21 08:40:27,129:INFO:Plugin CodeFormatterPlugin loaded from plugins\Code_formatieren.py
+2024-06-21 08:40:27,130:INFO:Plugin RefactorPlugin loaded from plugins\Code_Refactoring.py
+2024-06-21 08:40:27,130:INFO:Plugin DebuggerPlugin loaded from plugins\debugger_plugin.py
+2024-06-21 08:40:27,131:INFO:Plugin DocumentationGeneratorPlugin loaded from plugins\Dokumentation_generieren.py
+2024-06-21 08:40:27,131:INFO:Plugin VersionControlPlugin loaded from plugins\Git_Commit.py
+2024-06-21 08:40:27,132:INFO:Plugin LiveCodingPlugin loaded from plugins\live_coding_plugin.py
+2024-06-21 08:40:27,132:INFO:Plugin LiveCodingPlugin loaded from plugins\Live_Coding_Shell.py
+2024-06-21 08:40:27,137:INFO:Plugin ProfilingPlugin loaded from plugins\Profiling_Results.py
+2024-06-21 08:40:27,138:INFO:Plugin RefactorPlugin loaded from plugins\refactor_plugin.py
+2024-06-21 08:40:27,138:INFO:Plugin StaticCodeAnalysisPlugin loaded from plugins\static_code_analysis_plugin (2).py
+2024-06-21 08:40:27,138:INFO:Plugin UnitTestPlugin loaded from plugins\unit_test_plugin.py
+2024-06-21 08:40:27,139:DEBUG:Console Initialisierung abgeschlossen
+2024-06-21 08:40:27,179:DEBUG:Hauptfenster wird angezeigt
+2024-06-21 08:40:51,412:DEBUG:Dock-Positionen auf Standard zurückgesetzt
+2024-06-21 08:41:24,471:DEBUG:Einstellungen gespeichert
+2024-06-21 08:41:42,449:DEBUG:Einstellungen gespeichert
+2024-06-21 08:41:42,460:DEBUG:Programm geschlossen und log Datei gelöscht
+2024-06-21 08:43:54,743:DEBUG:Anwendung wird gestartet
+2024-06-21 08:43:54,753:DEBUG:Embedded Python Path: c:\users\ralfk\appdata\local\programs\python\python312\python.exe
+2024-06-21 08:43:54,753:DEBUG:Console Initialisierung beginnt
+2024-06-21 08:43:54,753:DEBUG:UI Initialisierung beginnt
+2024-06-21 08:43:55,077:DEBUG:Dock Widgets werden eingerichtet
+2024-06-21 08:43:55,082:DEBUG:UI Initialisierung abgeschlossen
+2024-06-21 08:43:55,137:DEBUG:Einstellungen geladen
+2024-06-21 08:43:55,138:DEBUG:Standard-Dock-Positionen gespeichert
+2024-06-21 08:43:55,187:INFO:Plugin AutoInstallPlugin loaded from plugins\auto_install_plugin.py
+2024-06-21 08:43:55,187:INFO:Plugin CodeFormatterPlugin loaded from plugins\Code_formatieren.py
+2024-06-21 08:43:55,187:INFO:Plugin RefactorPlugin loaded from plugins\Code_Refactoring.py
+2024-06-21 08:43:55,187:INFO:Plugin DebuggerPlugin loaded from plugins\debugger_plugin.py
+2024-06-21 08:43:55,187:INFO:Plugin DocumentationGeneratorPlugin loaded from plugins\Dokumentation_generieren.py
+2024-06-21 08:43:55,187:INFO:Plugin VersionControlPlugin loaded from plugins\Git_Commit.py
+2024-06-21 08:43:55,187:INFO:Plugin LiveCodingPlugin loaded from plugins\Live_Coding_Shell.py
+2024-06-21 08:43:55,204:INFO:Plugin ProfilingPlugin loaded from plugins\Profiling_Results.py
+2024-06-21 08:43:55,204:INFO:Plugin RefactorPlugin loaded from plugins\refactor_plugin.py
+2024-06-21 08:43:55,348:INFO:Plugin StaticCodeAnalysisPlugin loaded from plugins\static_code_analysis_plugin.py
+2024-06-21 08:43:55,348:DEBUG:Console Initialisierung abgeschlossen
+2024-06-21 08:43:55,387:DEBUG:Hauptfenster wird angezeigt
+2024-06-21 08:43:59,690:INFO:Plugin AutoInstallPlugin initialized
+2024-06-21 08:43:59,692:DEBUG:Starting new HTTPS connection (1): pypi.org:443
+2024-06-21 08:44:00,028:DEBUG:https://pypi.org:443 "GET /simple/ HTTP/1.1" 200 4592826
+2024-06-21 08:44:09,317:DEBUG:Einstellungen gespeichert
+2024-06-21 08:44:09,395:DEBUG:Programm geschlossen und log Datei gelöscht

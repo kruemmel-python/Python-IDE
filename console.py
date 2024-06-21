@@ -7,9 +7,11 @@ from PyQt5.QtWidgets import (
     QFileDialog, QMenu, QMessageBox, QDockWidget, QInputDialog, QTreeView, QFileSystemModel
 )
 from PyQt5.QtCore import Qt, QModelIndex
+from PyQt5.QtGui import QPalette, QColor  # Import für QPalette und QColor
 import logging
 from pathlib import Path
 from layout import CustomPalette
+from settings_dialog import SettingsDialog
 from code_editor import CodeEditor
 import info
 import shortcuts
@@ -34,6 +36,7 @@ class Console(QMainWindow):
         self.plugin_manager = PluginManager(self)
         self.initUI()
         self.load_settings()
+        self.save_default_dock_positions()  # Speichern der Standardpositionen
         self.plugin_manager.load_plugins()
         self.add_plugin_actions(self.plugin_menu)
         logging.debug("Console Initialisierung abgeschlossen")
@@ -116,7 +119,9 @@ class Console(QMainWindow):
         open_project_action = QAction('öffnen', self)
         new_project_action = QAction('erstellen', self)
         save_file_action = QAction('geladenen code speichern', self)
-        save_layout_action = QAction('Layout speichern', self)
+        save_layout_action = QAction('Layout speichern')
+        open_settings_action = QAction('Einstellungen öffnen', self)
+        reset_dock_positions_action = QAction('Dock-Positionen zurücksetzen', self)  # Hinzugefügt
         
         toggle_project_files_action = self.project_files_dock.toggleViewAction()
         toggle_code_editor_action = self.code_editor_dock.toggleViewAction()
@@ -145,7 +150,9 @@ class Console(QMainWindow):
         view_menu.addAction(toggle_terminal_action)
         view_menu.addAction(toggle_todo_list_action)
         view_menu.addAction(toggle_interactive_console_action)
+        view_menu.addAction(reset_dock_positions_action)  # Hinzugefügt
         settings_menu.addAction(save_layout_action)
+        settings_menu.addAction(open_settings_action)
 
         run_interactive_action.triggered.connect(self.run_interactive_script)
         lint_action.triggered.connect(self.lint_code)
@@ -164,6 +171,8 @@ class Console(QMainWindow):
         new_project_action.triggered.connect(self.new_project)
         save_file_action.triggered.connect(self.save_file)
         save_layout_action.triggered.connect(self.save_settings)
+        open_settings_action.triggered.connect(self.open_settings_dialog)
+        reset_dock_positions_action.triggered.connect(self.reset_dock_positions)  # Hinzugefügt
 
         self.setWindowTitle('Python IDE')
         self.setGeometry(100, 100, 1200, 800)
@@ -286,6 +295,25 @@ class Console(QMainWindow):
                 "console_output": self.console_output_dock.saveGeometry().toHex().data().decode(),
                 "todo_list": self.todo_list_dock.saveGeometry().toHex().data().decode(),
                 "interactive_console": self.interactive_console_dock.saveGeometry().toHex().data().decode()
+            },
+            "custom_palette": {
+                "colors": {
+                    "Window": self.palette().color(QPalette.Window).name(),
+                    "WindowText": self.palette().color(QPalette.WindowText).name(),
+                    "Base": self.palette().color(QPalette.Base).name(),
+                    "AlternateBase": self.palette().color(QPalette.AlternateBase).name(),
+                    "ToolTipBase": self.palette().color(QPalette.ToolTipBase).name(),
+                    "ToolTipText": self.palette().color(QPalette.ToolTipText).name(),
+                    "Text": self.palette().color(QPalette.Text).name(),
+                    "Button": self.palette().color(QPalette.Button).name(),
+                    "ButtonText": self.palette().color(QPalette.ButtonText).name(),
+                    "BrightText": self.palette().color(QPalette.BrightText).name(),
+                    "Link": self.palette().color(QPalette.Link).name(),
+                    "Highlight": self.palette().color(QPalette.Highlight).name(),
+                    "HighlightedText": self.palette().color(QPalette.HighlightedText).name()
+                },
+                "font_name": self.font().family(),
+                "font_size": self.font().pointSize()
             }
         }
         with open("settings.json", "w") as settings_file:
@@ -309,6 +337,11 @@ class Console(QMainWindow):
                     self.todo_list_dock.restoreGeometry(bytes.fromhex(dock_widget_states["todo_list"]))
                 if "interactive_console" in dock_widget_states:
                     self.interactive_console_dock.restoreGeometry(bytes.fromhex(dock_widget_states["interactive_console"]))
+                if "custom_palette" in settings:
+                    colors = settings["custom_palette"]["colors"]
+                    font_name = settings["custom_palette"]["font_name"]
+                    font_size = settings["custom_palette"]["font_size"]
+                    CustomPalette.customize_palette(self, colors, font_name, font_size)
             logging.debug("Einstellungen geladen")
 
     def run_interactive_script(self):
@@ -386,10 +419,47 @@ class Console(QMainWindow):
             action.toggled.connect(lambda checked, name=plugin_name: self.plugin_manager.toggle_plugin(name))
             plugin_menu.addAction(action)
 
+    def open_settings_dialog(self):
+        dialog = SettingsDialog(self)
+        dialog.exec_()
+
+    def apply_settings(self, colors, font_name, font_size):
+        CustomPalette.customize_palette(self, colors, font_name, font_size)
+        self.save_settings()
+
+    def save_default_dock_positions(self):
+        """Saves the default dock positions and states."""
+        self.default_dock_positions = {
+            "geometry": self.saveGeometry().toHex().data().decode(),
+            "window_state": self.saveState().toHex().data().decode(),
+            "dock_widget_states": {
+                "project_files": self.project_files_dock.saveGeometry().toHex().data().decode(),
+                "code_editor": self.code_editor_dock.saveGeometry().toHex().data().decode(),
+                "console_output": self.console_output_dock.saveGeometry().toHex().data().decode(),
+                "todo_list": self.todo_list_dock.saveGeometry().toHex().data().decode(),
+                "interactive_console": self.interactive_console_dock.saveGeometry().toHex().data().decode()
+            }
+        }
+        logging.debug("Standard-Dock-Positionen gespeichert")
+
+    def reset_dock_positions(self):
+        """Resets the dock positions to their default states."""
+        self.restoreGeometry(bytes.fromhex(self.default_dock_positions["geometry"]))
+        self.restoreState(bytes.fromhex(self.default_dock_positions["window_state"]))
+        dock_widget_states = self.default_dock_positions.get("dock_widget_states", {})
+        if "project_files" in dock_widget_states:
+            self.project_files_dock.restoreGeometry(bytes.fromhex(dock_widget_states["project_files"]))
+        if "code_editor" in dock_widget_states:
+            self.code_editor_dock.restoreGeometry(bytes.fromhex(dock_widget_states["code_editor"]))
+        if "console_output" in dock_widget_states:
+            self.console_output_dock.restoreGeometry(bytes.fromhex(dock_widget_states["console_output"]))
+        if "todo_list" in dock_widget_states:
+            self.todo_list_dock.restoreGeometry(bytes.fromhex(dock_widget_states["todo_list"]))
+        if "interactive_console" in dock_widget_states:
+            self.interactive_console_dock.restoreGeometry(bytes.fromhex(dock_widget_states["interactive_console"]))
+        logging.debug("Dock-Positionen auf Standard zurückgesetzt")
 
 if __name__ == '__main__':
-    from PyQt5.QtWidgets import QApplication
-    import sys
     app = QApplication(sys.argv)
     main_win = Console('path_to_embedded_python')
     main_win.show()

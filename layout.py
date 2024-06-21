@@ -21,3 +21,29 @@ class CustomPalette:
         font = QFont("Helvetica", 10)
         app.setFont(font)
         app.setPalette(palette)
+
+    @staticmethod
+    def customize_palette(app, colors, font_name, font_size):
+        role_map = {
+            'Window': QPalette.Window,
+            'WindowText': QPalette.WindowText,
+            'Base': QPalette.Base,
+            'AlternateBase': QPalette.AlternateBase,
+            'ToolTipBase': QPalette.ToolTipBase,
+            'ToolTipText': QPalette.ToolTipText,
+            'Text': QPalette.Text,
+            'Button': QPalette.Button,
+            'ButtonText': QPalette.ButtonText,
+            'BrightText': QPalette.BrightText,
+            'Link': QPalette.Link,
+            'Highlight': QPalette.Highlight,
+            'HighlightedText': QPalette.HighlightedText
+        }
+
+        palette = QPalette()
+        for role, color in colors.items():
+            if role in role_map:
+                palette.setColor(role_map[role], QColor(color))
+        font = QFont(font_name, font_size)
+        app.setFont(font)
+        app.setPalette(palette)
