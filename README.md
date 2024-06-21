@@ -6,114 +6,104 @@ Willkommen zur **Python IDE**, einer benutzerfreundlichen integrierten Entwicklu
 
 
 
-# Python IDE
+# **Python-IDE: Ein umfassender Leitfaden**
 
-Eine benutzerdefinierte Python-IDE mit integriertem Projekt-Explorer, Code-Editor, Konsole, interaktiver Konsole und Unterstützung für Plugins. Diese IDE ist darauf ausgelegt, sowohl mit einer systeminstallierten Python-Version als auch mit einer im Programmverzeichnis befindlichen eingebetteten Python-Version zu arbeiten.
+## **Einleitung**
+Diese Anleitung dient dazu, neuen Benutzern den Einstieg in die Nutzung unserer vielseitigen Python-IDE zu erleichtern. Sie bietet einen Überblick über die Hauptfunktionen und erklärt, wie man die IDE effektiv einsetzt.
 
-## Funktionen
+## **Überblick und Funktionen**
+### **1. Starten der IDE**
+- **Initialisierung**: Starte die IDE durch Ausführen der `main.py`-Datei.
 
-### Projekt-Explorer
+### **2. Code-Editor**
+- **Bearbeitung**: Schreibe, bearbeite und speichere Python-Skripte.
+- **Syntax-Highlighting**: Für eine klare und übersichtliche Darstellung des Codes.
 
-- Projekte aus einem Verzeichnis laden
-- Neue Projekte erstellen
-- Neue Dateien und Ordner hinzufügen
-- Dateien und Ordner löschen
-- Doppelklick auf Dateien zum Öffnen im Code-Editor
+### **3. Konsole**
+- **Interaktivität**: Führe Python-Code direkt in der interaktiven Konsole aus.
+- **Debugging**: Ideal für schnelle Tests und Fehlerbehebung.
 
-### Code-Editor
+### **4. Dateioperationen**
+- **Management**: Öffne, speichere und erstelle neue Projekte.
+- **Zugriff**: Nutze das Menü `Datei` für diese Aktionen.
 
-- Syntaxhervorhebung
-- Fehlerhervorhebung
-- Autovervollständigung
-- Linting mit pylint
+### **5. Plugin-System**
+- **Erweiterbarkeit**: Unterstützung für diverse Plugins zur Erweiterung der Funktionalität.
+- **Verwaltung**: Plugins über den Plugin-Manager steuern.
 
-### Konsole
+### **6. Einstellungen**
+- **Anpassung**: Konfiguriere die IDE nach deinen Wünschen (Aussehen, Schriftarten, Farben, Tastenkombinationen).
+- **Zugänglichkeit**: Einstellungen über das Menü `Einstellungen` ändern.
 
-- Anzeige des Programmoutputs
-- Anzeige von Fehlermeldungen und Logs
+### **7. Shortcuts**
+- **Effizienz**: Zahlreiche vordefinierte Tastenkombinationen.
+- **Personalisierung**: Anpassung in den Einstellungen möglich.
 
-### Interaktive Konsole
+### **8. Übersetzung**
+- **Mehrsprachigkeit**: Unterstützung für verschiedene Sprachen.
 
-- Ausführen von Python-Code interaktiv
+### **9. TODO-Liste**
+- **Organisation**: Integriertes Tool zur Verwaltung von Aufgaben.
 
-### Menüoptionen
+## **Nutzung der Plugins**
+### **1. API-Tester**
+- **Funktionalität**: Teste API-Aufrufe mit dem `api_tester_plugin`.
 
-#### Code-Menü
+### **2. Auto-Install**
+- **Komfort**: Automatische Installation benötigter Pakete durch `auto_install_plugin`.
 
-- **Interaktives Programm ausführen (Ctrl+I):** Führt das aktuelle Skript in der interaktiven Konsole aus
-- **Lint Code (Ctrl+Shift+F):** Lintet das aktuelle Skript mit pylint
-- **Git Commit (Ctrl+Shift+C):** Commits Änderungen in das lokale Git-Repository
-- **Snippet hinzufügen (Ctrl+Shift+N):** Fügt den aktuellen Code als Snippet hinzu
-- **Unit Tests ausführen (Ctrl+T):** Führt Unit-Tests für das aktuelle Projekt aus
-- **Code Refactoring (Ctrl+Shift+R):** Refaktorisieren des Codes
-- **Debugger starten (Ctrl+D):** Startet den Debugger
+### **3. Code-Formatierung und Refactoring**
+- **Optimierung**: Verbessere deinen Code mit `Code_formatieren` und `Code_Refactoring`.
 
-#### Programm erstellen-Menü
+### **4. Datenbank-Browser**
+- **Datenmanagement**: Durchsuche und bearbeite Datenbanken mit dem `database_browser_plugin`.
 
-- **erstellen:** Erstellen einer ausführbaren Datei aus dem aktuellen Projekt
+### **5. Debugger**
+- **Fehlerbehebung**: Finde Fehler mit dem `debugger_plugin`.
 
-#### Konsole-Menü
+### **6. Dokumentation**
+- **Dokumentenerstellung**: Erstelle Dokumentationen mit `Dokumentation_generieren`.
 
-- **Ausgabe löschen (Ctrl+L):** Löscht den Konsolenausgang
-- **Interaktive Konsole löschen (Ctrl+Shift+L):** Löscht die interaktive Konsole
+### **7. GitHub-Integration**
+- **Vernetzung**: Arbeite mit GitHub durch den `github_plugin`.
 
-#### Info-Menü
+### **8. Live-Coding-Shell**
+- **Echtzeit**: Sieh Code-Ergebnisse sofort mit `Live_Coding_Shell`.
 
-- **Info (Ctrl+H):** Zeigt Informationen über die IDE an
-- **Tastenkürzel (Ctrl+K):** Zeigt Tastenkürzel an
-- **Text übersetzen (Ctrl+Shift+T):** Übersetzt den ausgewählten Text
+### **9. Profiling**
+- **Leistungsanalyse**: Analysiere die Performance deines Codes mit `Profiling_Results`.
 
-#### Bibliotheken-Menü
+### **10. PyInstaller**
+- **Distribution**: Wandele Skripte in ausführbare Dateien um mit `pyinstaller_plugin`.
 
-- **Neues Paket installieren:** Installiert ein neues Python-Paket
-- **Paket aktualisieren:** Aktualisiert ein vorhandenes Python-Paket
-- **Paket deinstallieren:** Deinstalliert ein Python-Paket
+### **11. Statische Code-Analyse**
+- **Qualitätssicherung**: Finde Verbesserungsmöglichkeiten mit `static_code_analysis_plugin`.
 
-#### Projekt-Menü
+### **12. Unit-Tests**
+- **Testing**: Erstelle und führe Unit-Tests aus mit `unit_test_plugin`.
 
-- **Projekt öffnen (Ctrl+O):** Öffnet ein vorhandenes Projekt
-- **Projekt erstellen (Ctrl+N):** Erstellt ein neues Projekt
+## **Schritt-für-Schritt-Anleitung**
+### **1. Starten der IDE**
+- **Ausführung**: Starte die IDE mit `main.py`.
 
-#### Speichern-Menü
+### **2. Neues Projekt erstellen**
+- **Projektmanagement**: Erstelle ein neues Projekt über `Datei` > `Neues Projekt`.
 
-- **geladenen Code speichern (Ctrl+S):** Speichert den aktuellen Code
+### **3. Code schreiben**
+- **Kreativität**: Beginne in einer neuen Datei zu schreiben über `Datei` > `Neue Datei`.
 
+### **4. Code ausführen**
+- **Testen**: Führe dein Skript aus über die Konsole oder `Ausführen` > `Script ausführen`.
 
-#### Ansicht-Menü
+### **5. Plugins verwenden**
+- **Erweiterung**: Aktiviere und konfiguriere Plugins über `Plugins`.
 
-- Sichtbarkeit der verschiedenen Dock-Widgets umschalten:
-  - **Projekt Explorer (Ctrl+T)**
-  - **Code Editor**
-  - **Konsole**
-  - **TODO Liste**
-  - **Interaktive Konsole**
+### **6. Einstellungen anpassen**
+- **Personalisierung**: Passe die IDE in `Einstellungen` an deine Vorlieben an.
 
-#### Einstellungen-Menü
+### **7. Aufgaben verwalten**
+- **Organisation**: Nutze die TODO-Liste für deine Aufgaben.
 
-- **Layout speichern (Ctrl+Shift+S):** Speichert die aktuellen Layouteinstellungen
-
-### Plugin-Unterstützung
-
-Die IDE unterstützt Plugins zur Erweiterung der Funktionalität. Plugins können erstellt und verwaltet werden, ohne den Kerncode der IDE zu ändern.
-
-Siehe die [Plugin Anleitung](plugin_anleitung.md) für detaillierte Anweisungen zum Erstellen und Verwenden von Plugins.
-
-### Systemanforderungen
-
-- Die IDE kann sowohl mit einer systeminstallierten Python-Version als auch mit einer eingebetteten Python-Version arbeiten.
-- Die eingebettete Python-Version sollte im Verzeichnis `python_embedded` innerhalb des Programmordners liegen.
-
-## Erste Schritte
-
-### Voraussetzungen
-
-- Python 3.8 oder höher
-
-### Installation
-
-1. Klone das Repository:
-   ```sh
-   git clone https://github.com/kruemmel-python/Python-IDE
 
 
 ## Lizenz
