@@ -1,4 +1,3 @@
-# console.py
 import os
 import sys
 import json
@@ -94,9 +93,6 @@ class Console(QMainWindow):
         info_menu = menu_bar.addMenu('Info')
         library_menu = menu_bar.addMenu('Bibliotheken')
         project_menu = menu_bar.addMenu('Projekt')
-        back_action = QAction('Zurück', self)
-        back_action.triggered.connect(self.go_back)
-        project_menu.addAction(back_action)
         view_menu = menu_bar.addMenu('Ansicht')
         settings_menu = menu_bar.addMenu('Einstellungen')
         self.plugin_menu = menu_bar.addMenu('Plugins')
@@ -217,14 +213,6 @@ class Console(QMainWindow):
         self.interactive_console_dock.setObjectName("interactive_console_dock")
         self.addDockWidget(Qt.BottomDockWidgetArea, self.interactive_console_dock)
 
-    def go_back(self):
-        current_path = self.file_system_model.rootPath()
-        parent_path = os.path.dirname(current_path)
-        if parent_path and parent_path != current_path:
-            self.file_system_model.setRootPath(parent_path)
-            self.project_files.setRootIndex(self.file_system_model.index(parent_path))
-            logging.debug(f"Zurück zu: {parent_path}")
-
     def open_project(self):
         logging.debug("Projekt wird geöffnet")
         project_dir = QFileDialog.getExistingDirectory(self, 'Open Project', os.getcwd())
@@ -262,9 +250,6 @@ class Console(QMainWindow):
         file_path = self.file_system_model.filePath(index)
         logging.debug(f"Datei wird geladen: {file_path}")
         load_file(self, file_path)
-        # Set project dir to the directory of the loaded file
-        self.project_dir = os.path.dirname(file_path)
-        sys.path.insert(0, self.project_dir)
 
     def save_file(self):
         logging.debug("Datei wird gespeichert")
@@ -381,8 +366,8 @@ class Console(QMainWindow):
             selected_text = get_selected_text(self.code_editor)
         elif self.console_output.hasFocus():
             selected_text = get_selected_text(self.console_output)
-        elif self.interactive_console.console.hasFocus():  # Check if the interactive console has focus
-            selected_text = get_selected_text(self.interactive_console.console)
+        elif self.interactive_console.hasFocus():
+            selected_text = get_selected_text(self.interactive_console)
 
         if not selected_text:
             QMessageBox.warning(self, "Übersetzung", "Kein Text ausgewählt!")
