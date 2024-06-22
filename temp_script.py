@@ -1,45 +1,34 @@
-def lade_fragen():
-    fragen = [
-        {
-            "frage": "Was ist 2 + 2?",
-            "antworten": ["1. 3", "2. 4", "3. 5"],
-            "korrekte_antwort": "2"
-        },
-        {
-            "frage": "Was ist die Hauptstadt von Frankreich?",
-            "antworten": ["a. Berlin", "b. Madrid", "c. Paris"],
-            "korrekte_antwort": "c"
-        },
-        {
-            "frage": "Welche Zahl ist eine Primzahl?",
-            "antworten": ["1. 4", "2. 6", "3. 11"],
-            "korrekte_antwort": "3"
-        },
-        {
-            "frage": "Welche Farbe hat der Himmel?",
-            "antworten": ["a. Grün", "b. Blau", "c. Gelb"],
-            "korrekte_antwort": "b"
-        }
-    ]
-    return fragen
 
-def quiz_spielen(fragen):
-    punkte = 0
-    for i, frage in enumerate(fragen):
-        print(f"Frage {i+1}: {frage['frage']}")
-        for antwort in frage['antworten']:
-            print(antwort)
-        
-        antwort = input("Ihre Antwort eingeben: ").strip().lower()
-        if antwort == frage['korrekte_antwort']:
-            print("Richtig!")
-            punkte += 1
-        else:
-            print(f"Falsch! Die richtige Antwort war: {frage['korrekte_antwort']}")
-        print()
+import sys
+import io
+sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding='utf-8')
+sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding='utf-8')
 
-    print(f"Quiz beendet! Sie haben {punkte} von {len(fragen)} Punkten erreicht.")
+# Quiz mit gemischten Antwortmöglichkeiten
 
-if __name__ == "__main__":
-    fragen = lade_fragen()
-    quiz_spielen(fragen)
+def stelle_frage(frage, antworten, korrekte_antwort):
+    print(frage)
+    for antwort in antworten:
+        print(antwort)
+    eingabe = input("Deine Antwort: ")
+    if eingabe.lower() == korrekte_antwort.lower():
+        print("Richtig! 🎉")
+        return True
+    else:
+        print("Falsch. 😢 Die richtige Antwort war " + korrekte_antwort + ".")
+        return False
+
+# Hauptprogramm
+fragen = [
+    ("Frage 1: Was ist die Hauptstadt von Deutschland?", ["A) Berlin", "B) München", "C) Köln", "D) Frankfurt"], "A"),
+    ("Frage 2: Wie viele Bundesländer hat Deutschland?", ["1) 14", "2) 15", "3) 16", "4) 17"], "3"),
+    ("Frage 3: Wer hat die Relativitätstheorie entwickelt?", ["A) Isaac Newton", "B) Albert Einstein", "C) Nikola Tesla", "D) Stephen Hawking"], "B"),
+    ("Frage 4: Welcher Fluss fließt durch Berlin?", ["1) Rhein", "2) Donau", "3) Elbe", "4) Spree"], "4")
+]
+
+punkte = 0
+for frage, antworten, korrekte_antwort in fragen:
+    if stelle_frage(frage, antworten, korrekte_antwort):
+        punkte += 1
+
+print(f"Du hast {punkte} von {len(fragen)} Fragen richtig beantwortet!")

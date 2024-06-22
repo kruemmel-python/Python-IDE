@@ -1,10 +1,9 @@
-# console.py
 import os
 import sys
 import json
 import subprocess
-from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QPlainTextEdit, QMenuBar, QAction, QWidget, QListWidget, QFileDialog, QMenu, QMessageBox, QDockWidget, QInputDialog, QTreeView, QFileSystemModel, QListWidgetItem, QTextEdit, QApplication, QLineEdit
-from PyQt5.QtCore import Qt, QModelIndex, QProcess
+from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QPlainTextEdit, QMenuBar, QAction, QWidget, QListWidget, QFileDialog, QMenu, QMessageBox, QDockWidget, QInputDialog, QTreeView, QFileSystemModel, QListWidgetItem, QTextEdit, QApplication
+from PyQt5.QtCore import Qt, QModelIndex
 from PyQt5.QtGui import QPalette, QColor, QTextFormat, QTextCursor, QKeySequence, QClipboard
 import logging
 from pathlib import Path
@@ -20,46 +19,8 @@ from plugin_manager import PluginManager
 from plugin_interface import PluginInterface
 from translator import translate_text
 from zoomable_widget import ZoomablePlainTextEdit
-
-class InteractiveConsole(QWidget):
-    def __init__(self, embedded_python_path):
-        super().__init__()
-        self.embedded_python_path = embedded_python_path
-        self.initUI()
-
-    def initUI(self):
-        layout = QVBoxLayout()
-        self.console = QPlainTextEdit(self)
-        self.console.setReadOnly(True)
-        self.input_line = QLineEdit(self)
-        self.input_line.returnPressed.connect(self.send_input)
-
-        layout.addWidget(self.console)
-        layout.addWidget(self.input_line)
-        self.setLayout(layout)
-        self.process = None
-
-    def run_code(self, script_path):
-        if self.process and self.process.state() == QProcess.Running:
-            self.process.kill()
-        self.process = QProcess(self)
-        self.process.setProcessChannelMode(QProcess.MergedChannels)
-        self.process.readyReadStandardOutput.connect(self.print_output)
-        self.process.readyReadStandardError.connect(self.print_output)
-        self.process.start(self.embedded_python_path, [script_path])
-
-    def print_output(self):
-        output = self.process.readAllStandardOutput().data().decode('utf-8', errors='ignore')
-        self.console.appendPlainText(output)
-
-    def send_input(self):
-        if self.process and self.process.state() == QProcess.Running:
-            input_text = self.input_line.text() + '\n'
-            self.process.write(input_text.encode('utf-8'))
-            self.input_line.clear()
-
-    def clear(self):
-        self.console.clear()
+from interactive_console import InteractiveConsole
+import menu_manager  # Importiere das Menümodul
 
 class Console(QMainWindow):
     def __init__(self, embedded_python_path):
@@ -77,178 +38,55 @@ class Console(QMainWindow):
         self.load_settings()
         self.save_default_dock_positions()  # Speichern der Standardpositionen
         self.plugin_manager.load_plugins()
-        self.add_plugin_actions(self.plugin_menu)
+        menu_manager.create_plugin_actions(self)
         logging.debug("Console Initialisierung abgeschlossen")
-
+    
+    def reset_editor(self):
+        # Logik zum Zurücksetzen des Editors
+        self.code_editor.clear()
+        self.code_editor.current_file = None
+        self.console_output.clear()
+        self.interactive_console.clear()
+        self.setWindowTitle("Dein Editor Name")  # Setze den Fenstertitel zurück oder zu einem Standardwert
+    
     def create_action(self, name, function, shortcut=None):
         action = QAction(name, self)
         action.triggered.connect(function)
         if shortcut:
             action.setShortcut(shortcut)
         return action
-
+    
     def add_action_to_menu(self, menu_name, action):
         menu = self.findChild(QMenu, menu_name)
         if menu:
             menu.addAction(action)
-
-    def remove_action_from_menu(self, menu_name, action):
-        menu = self.findChild(QMenu, menu_name)
-        if menu:
-            menu.removeAction(action)
-
+    
     def initUI(self):
-        logging.debug("UI Initialisierung beginnt")
-        CustomPalette.set_dark_palette(self)
-
+        self.setWindowTitle("Python IDE")
+        
+        # Widgets initialisieren
         self.project_files = QTreeView(self)
+        self.file_system_model = QFileSystemModel(self.project_files)
+        self.file_system_model.setRootPath('')
+        self.project_files.setModel(self.file_system_model)
         self.project_files.setContextMenuPolicy(Qt.CustomContextMenu)
         self.project_files.customContextMenuRequested.connect(self.open_context_menu)
         self.project_files.doubleClicked.connect(self.load_file)
 
-        self.file_system_model = QFileSystemModel(self.project_files)
-        self.file_system_model.setRootPath('')
-        self.project_files.setModel(self.file_system_model)
-        
-        self.code_editor = CodeEditor(console=self)  # Initialisiere den CodeEditor
+        self.code_editor = CodeEditor(console=self)
         self.console_output = ZoomablePlainTextEdit(self)
         self.console_output.setReadOnly(True)
         
         self.todo_list = QListWidget(self)
         self.todo_list.itemClicked.connect(self.goto_todo)
 
-        self.interactive_console = InteractiveConsole(self.embedded_python_path)
+        self.interactive_console = InteractiveConsole(self.embedded_python_path, self.code_editor, self.console_output, self.project_dir)
 
         self.setup_dock_widgets()
+        menu_manager.create_menus(self)  # Erstelle die Menüs über das Menümodul
 
-        menu_bar = QMenuBar(self)
-        self.setMenuBar(menu_bar)
-
-        menu_bar = self.menuBar()
-        menu_bar.setStyleSheet("QMenuBar { background-color: #353535; color: #FFFFFF; }")
-
-        code_menu = QMenu('Code', self)
-        code_menu.setObjectName('Code')
-        menu_bar.addMenu(code_menu)
-
-        code_check_menu = QMenu('Code prüfen', self)
-        code_check_menu.setObjectName('Code prüfen')
-        menu_bar.addMenu(code_check_menu)
-
-        error_search_menu = QMenu('Fehler suche', self)
-        error_search_menu.setObjectName('Fehler suche')
-        code_check_menu.addMenu(error_search_menu)
-
-        create_exe_menu = menu_bar.addMenu('Programm erstellen')
-        clear_output_menu = menu_bar.addMenu('Konsole')
-        info_menu = menu_bar.addMenu('Info')
-        library_menu = menu_bar.addMenu('Bibliotheken')
-        project_menu = menu_bar.addMenu('Projekt')
-        view_menu = menu_bar.addMenu('Ansicht')
-        settings_menu = menu_bar.addMenu('Einstellungen')
-        self.plugin_menu = menu_bar.addMenu('Plugins')
-        open_project_menu = project_menu.addMenu('Projekt öffnen')
-        new_project_menu = project_menu.addMenu('Projekt erstellen')
-        save_file_menu = menu_bar.addMenu('Speichern')
-
-        run_interactive_action = QAction('Interaktives Programm ausführen', self)
-        lint_action = QAction('Lint Code', self)
-        lint_action.triggered.connect(self.lint_code)
-        lint_action.setText('Fehler suche')  # Aktion umbenennen
-        git_commit_action = QAction('Git Commit', self)
-        add_snippet_action = QAction('Snippet hinzufügen', self)
-        create_exe_action = QAction('erstellen', self)
-        clear_output_action = QAction('Ausgabe löschen', self)
-        clear_interactive_console_action = QAction('Interaktive Konsole löschen', self)
-        translate_action = QAction('Text übersetzen', self)
-        info_action = QAction('Info', self)
-        shortcuts_action = QAction('Tastenkürzel', self)
-        install_package_action = QAction('Neues Paket installieren', self)
-        update_package_action = QAction('Paket aktualisieren', self)
-        uninstall_package_action = QAction('Paket deinstallieren', self)
-        open_project_action = QAction('öffnen', self)
-        new_project_action = QAction('erstellen', self)
-        save_file_action = QAction('geladenen code speichern', self)
-        save_layout_action = QAction('Layout speichern')
-        open_settings_action = QAction('Einstellungen öffnen', self)
-        reset_dock_positions_action = QAction('Dock-Positionen zurücksetzen', self)
-        
-        toggle_project_files_action = self.project_files_dock.toggleViewAction()
-        toggle_code_editor_action = self.code_editor_dock.toggleViewAction()
-        toggle_terminal_action = self.console_output_dock.toggleViewAction()
-        toggle_todo_list_action = self.todo_list_dock.toggleViewAction()
-        toggle_interactive_console_action = self.interactive_console_dock.toggleViewAction()
-        toggle_error_list_action = self.error_dock.toggleViewAction()  # Aktion für die Fehlerliste
-
-        code_menu.addAction(run_interactive_action)
-        code_menu.addAction(git_commit_action)
-        code_menu.addAction(add_snippet_action)
-        create_exe_menu.addAction(create_exe_action)
-        clear_output_menu.addAction(clear_output_action)
-        clear_output_menu.addAction(clear_interactive_console_action)
-        info_menu.addAction(info_action)
-        info_menu.addAction(shortcuts_action)
-        info_menu.addAction(translate_action)
-        library_menu.addAction(install_package_action)
-        library_menu.addAction(update_package_action)
-        library_menu.addAction(uninstall_package_action)
-        open_project_menu.addAction(open_project_action)
-        new_project_menu.addAction(new_project_action)
-        save_file_menu.addAction(save_file_action)
-        view_menu.addAction(toggle_project_files_action)
-        view_menu.addAction(toggle_code_editor_action)
-        view_menu.addAction(toggle_terminal_action)
-        view_menu.addAction(toggle_todo_list_action)
-        view_menu.addAction(toggle_interactive_console_action)
-        view_menu.addAction(toggle_error_list_action)  # Aktion zur Ansicht hinzufügen
-        view_menu.addAction(reset_dock_positions_action)
-        settings_menu.addAction(save_layout_action)
-        settings_menu.addAction(open_settings_action)
-
-        run_interactive_action.triggered.connect(self.run_interactive_script)
-        git_commit_action.triggered.connect(self.git_commit)
-        add_snippet_action.triggered.connect(self.add_snippet)
-        create_exe_action.triggered.connect(lambda: create_exe(self))
-        clear_output_action.triggered.connect(self.clear_output)
-        clear_interactive_console_action.triggered.connect(self.clear_interactive_console)
-        translate_action.triggered.connect(self.translate_selected_text)
-        info_action.triggered.connect(info.show_info)
-        shortcuts_action.triggered.connect(shortcuts.show_shortcuts)
-        install_package_action.triggered.connect(lambda: install_package(self))
-        update_package_action.triggered.connect(lambda: update_package(self))
-        uninstall_package_action.triggered.connect(lambda: uninstall_package(self))
-        open_project_action.triggered.connect(self.open_project)
-        new_project_action.triggered.connect(self.new_project)
-        save_file_action.triggered.connect(self.save_file)
-        save_layout_action.triggered.connect(self.save_settings)
-        open_settings_action.triggered.connect(self.open_settings_dialog)
-        reset_dock_positions_action.triggered.connect(self.reset_dock_positions)
-
-        self.setWindowTitle('Python IDE')
         self.setGeometry(100, 100, 1200, 800)
         logging.debug("UI Initialisierung abgeschlossen")
-
-        # Add shortcuts for actions
-        run_interactive_action.setShortcut('Ctrl+I')
-        git_commit_action.setShortcut('Ctrl+Shift+C')
-        add_snippet_action.setShortcut('Ctrl+Shift+N')
-        clear_output_action.setShortcut('Ctrl+L')
-        clear_interactive_console_action.setShortcut('Ctrl+Shift+L')
-        open_project_action.setShortcut('Ctrl+O')
-        new_project_action.setShortcut('Ctrl+N')
-        save_file_action.setShortcut('Ctrl+S')
-        info_action.setShortcut('Ctrl+H')
-        shortcuts_action.setShortcut('Ctrl+K')
-        translate_action.setShortcut('Ctrl+Shift+T')
-        toggle_project_files_action.setShortcut('Ctrl+T')
-        save_layout_action.setShortcut('Ctrl+Shift+S')
-
-        # Shortcuts for navigating errors
-        next_error_action = QAction('Nächsten Fehler anzeigen', self)
-        next_error_action.setShortcut(QKeySequence('Ctrl+E'))
-        next_error_action.triggered.connect(self.goto_next_error)
-        error_search_menu.addAction(lint_action)
-        error_search_menu.addAction(next_error_action)
 
         self.setup_clipboard_handling()
 
@@ -415,16 +253,6 @@ class Console(QMainWindow):
             self.load_settings()
             logging.debug("Vorherige Einstellungen wiederhergestellt")
 
-    def run_interactive_script(self):
-        code = self.code_editor.toPlainText()
-        script_path = os.path.join(self.project_dir if self.project_dir else os.getcwd(), "temp_script.py")
-        with open(script_path, 'w', encoding='utf-8') as temp_script:
-            temp_script.write(code)
-        logging.debug(f"Script gespeichert: {script_path}")
-        self.console_output.appendPlainText(f"Script gespeichert: {script_path}")
-        self.code_editor.current_file = script_path  # Setze den aktuellen Dateipfad
-        self.interactive_console.run_code(script_path)  # Führe das Skript in der InteractiveConsole aus
-
     def lint_code(self):
         code = self.code_editor.toPlainText()
         with open("temp_code.py", "w", encoding="utf-8") as file:
@@ -506,12 +334,12 @@ class Console(QMainWindow):
     def add_snippet(self):
         snippet_name, ok = QInputDialog.getText(self, 'Snippet hinzufügen', 'Snippet Name:')
         if ok and snippet_name:
-            code = self.ide.code_editor.toPlainText()
+            code = self.code_editor.toPlainText()
             snippets_dir = "snippets"
             os.makedirs(snippets_dir, exist_ok=True)
             with open(os.path.join(snippets_dir, f"{snippet_name}.py"), "w", encoding="utf-8") as file:
                 file.write(code)
-            self.ide.console_output.appendPlainText(f"Snippet '{snippet_name}' gespeichert.")
+            self.console_output.appendPlainText(f"Snippet '{snippet_name}' gespeichert.")
             logging.debug(f"Snippet '{snippet_name}' gespeichert")
 
     def translate_selected_text(self):
@@ -535,15 +363,6 @@ class Console(QMainWindow):
         translated_text = translate_text(selected_text)
         self.console_output.appendPlainText(f"Original: {selected_text}\nÜbersetzt: {translated_text}")
         QMessageBox.information(self, "Übersetzung", f"Übersetzter Text:\n{translated_text}")
-
-    def add_plugin_actions(self, plugin_menu):
-        plugins = self.plugin_manager.get_plugins()
-        for plugin_name, plugin_instance in plugins:
-            action = QAction(f"{plugin_name} aktivieren/deaktivieren", self)
-            action.setCheckable(True)
-            action.setChecked(self.plugin_manager.is_plugin_active(plugin_name))
-            action.toggled.connect(lambda checked, name=plugin_name: self.plugin_manager.toggle_plugin(name))
-            plugin_menu.addAction(action)
 
     def open_settings_dialog(self):
         self.save_previous_settings()  # Vorherige Einstellungen speichern

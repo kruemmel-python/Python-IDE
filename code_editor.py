@@ -11,6 +11,7 @@ from zoomable_widget import ZoomablePlainTextEdit
 import re
 import subprocess
 import sys
+import io
 
 class CodeEditor(ZoomablePlainTextEdit):
     def __init__(self, console=None, parent=None):
@@ -149,8 +150,11 @@ class CodeEditor(ZoomablePlainTextEdit):
         # Bestimme das Verzeichnis des Skripts
         script_dir = os.path.dirname(os.path.abspath(script_path))
         
-        # Ändere das aktuelle Arbeitsverzeichnis zu dem des Skripts
+        # Setze das Arbeitsverzeichnis auf das Verzeichnis des Skripts
         os.chdir(script_dir)
+        
+        # Setze die Standardausgabe auf UTF-8
+        sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding='utf-8')
         
         # Führe das Skript aus
         try:
