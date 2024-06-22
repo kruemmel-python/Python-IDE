@@ -1,33 +1,65 @@
+# console.py
 import os
 import sys
 import json
 import subprocess
-from PyQt5.QtWidgets import (
-    QMainWindow, QVBoxLayout, QPlainTextEdit, QMenuBar, QAction, QWidget, QListWidget,
-    QFileDialog, QMenu, QMessageBox, QDockWidget, QInputDialog, QTreeView, QFileSystemModel,
-    QListWidgetItem, QTextEdit, QApplication
-)
-from PyQt5.QtCore import Qt, QModelIndex
+from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QPlainTextEdit, QMenuBar, QAction, QWidget, QListWidget, QFileDialog, QMenu, QMessageBox, QDockWidget, QInputDialog, QTreeView, QFileSystemModel, QListWidgetItem, QTextEdit, QApplication, QLineEdit
+from PyQt5.QtCore import Qt, QModelIndex, QProcess
 from PyQt5.QtGui import QPalette, QColor, QTextFormat, QTextCursor, QKeySequence, QClipboard
 import logging
 from pathlib import Path
 from layout import CustomPalette
 from settings_dialog import SettingsDialog
-from code_editor import CodeEditor  # Importiere die CodeEditor-Klasse
+from code_editor import CodeEditor
 import info
 import shortcuts
-from file_operations import (
-    open_project, new_project, create_new_file, create_new_folder,
-    delete_item, load_file, save_file, install_package, update_package,
-    uninstall_package
-)
+from file_operations import open_project, new_project, create_new_file, create_new_folder, delete_item, load_file, save_file, install_package, update_package, uninstall_package
 from todo_list import update_todo_list, goto_todo
-from interactive_console import InteractiveConsole
 from process_manager import create_exe
 from plugin_manager import PluginManager
 from plugin_interface import PluginInterface
 from translator import translate_text
-from zoomable_widget import ZoomablePlainTextEdit  # Importiere die ZoomablePlainTextEdit-Klasse
+from zoomable_widget import ZoomablePlainTextEdit
+
+class InteractiveConsole(QWidget):
+    def __init__(self, embedded_python_path):
+        super().__init__()
+        self.embedded_python_path = embedded_python_path
+        self.initUI()
+
+    def initUI(self):
+        layout = QVBoxLayout()
+        self.console = QPlainTextEdit(self)
+        self.console.setReadOnly(True)
+        self.input_line = QLineEdit(self)
+        self.input_line.returnPressed.connect(self.send_input)
+
+        layout.addWidget(self.console)
+        layout.addWidget(self.input_line)
+        self.setLayout(layout)
+        self.process = None
+
+    def run_code(self, script_path):
+        if self.process and self.process.state() == QProcess.Running:
+            self.process.kill()
+        self.process = QProcess(self)
+        self.process.setProcessChannelMode(QProcess.MergedChannels)
+        self.process.readyReadStandardOutput.connect(self.print_output)
+        self.process.readyReadStandardError.connect(self.print_output)
+        self.process.start(self.embedded_python_path, [script_path])
+
+    def print_output(self):
+        output = self.process.readAllStandardOutput().data().decode('utf-8', errors='ignore')
+        self.console.appendPlainText(output)
+
+    def send_input(self):
+        if self.process and self.process.state() == QProcess.Running:
+            input_text = self.input_line.text() + '\n'
+            self.process.write(input_text.encode('utf-8'))
+            self.input_line.clear()
+
+    def clear(self):
+        self.console.clear()
 
 class Console(QMainWindow):
     def __init__(self, embedded_python_path):
@@ -390,7 +422,8 @@ class Console(QMainWindow):
             temp_script.write(code)
         logging.debug(f"Script gespeichert: {script_path}")
         self.console_output.appendPlainText(f"Script gespeichert: {script_path}")
-        self.interactive_console.run_code(script_path)
+        self.code_editor.current_file = script_path  # Setze den aktuellen Dateipfad
+        self.interactive_console.run_code(script_path)  # Führe das Skript in der InteractiveConsole aus
 
     def lint_code(self):
         code = self.code_editor.toPlainText()

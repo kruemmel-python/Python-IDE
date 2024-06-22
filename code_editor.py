@@ -1,3 +1,5 @@
+import os
+import sqlite3
 from PyQt5.QtWidgets import QTextEdit, QCompleter, QMenu
 from PyQt5.QtGui import QColor, QTextFormat, QTextCursor, QPainter
 from PyQt5.QtCore import Qt, QRect
@@ -5,10 +7,12 @@ import jedi
 from highlighter import PythonHighlighter
 from line_number_area import LineNumberArea
 from doc_widget import DocWidget
-from zoomable_widget import ZoomablePlainTextEdit  # Importiere ZoomablePlainTextEdit
+from zoomable_widget import ZoomablePlainTextEdit
 import re
+import subprocess
+import sys
 
-class CodeEditor(ZoomablePlainTextEdit):  # Erbt jetzt von ZoomablePlainTextEdit
+class CodeEditor(ZoomablePlainTextEdit):
     def __init__(self, console=None, parent=None):
         super().__init__(parent)
         self.console = console
@@ -23,15 +27,15 @@ class CodeEditor(ZoomablePlainTextEdit):  # Erbt jetzt von ZoomablePlainTextEdit
         self.textChanged.connect(self.update_todo_list)
         self.completer = None
         self.completions = []
-        self.doc_widget = None  # Referenz zum Dokumentationsfenster
+        self.doc_widget = None
 
         self.setMouseTracking(True)
 
-    def lineNumberAreaWidth(self):
+    def lineNumberAreaWidth(self) -> int:
         digits = 1
         max_num = max(1, self.blockCount())
         while max_num >= 10:
-            max_num /= 10
+            max_num //= 10
             digits += 1
         space = 3 + self.fontMetrics().horizontalAdvance('9') * digits
         return space
@@ -39,7 +43,7 @@ class CodeEditor(ZoomablePlainTextEdit):  # Erbt jetzt von ZoomablePlainTextEdit
     def updateLineNumberAreaWidth(self, _):
         self.setViewportMargins(self.lineNumberAreaWidth(), 0, 0, 0)
 
-    def updateLineNumberArea(self, rect, dy):
+    def updateLineNumberArea(self, rect: QRect, dy: int):
         if dy:
             self.lineNumberArea.scroll(0, dy)
         else:
@@ -73,7 +77,7 @@ class CodeEditor(ZoomablePlainTextEdit):  # Erbt jetzt von ZoomablePlainTextEdit
         extraSelections = []
         if not self.isReadOnly():
             selection = QTextEdit.ExtraSelection()
-            lineColor = QColor(Qt.transparent)  # Kein Hintergrund
+            lineColor = QColor(Qt.transparent)
             selection.format.setBackground(lineColor)
             selection.format.setProperty(QTextFormat.FullWidthSelection, True)
             selection.cursor = self.textCursor()
@@ -141,13 +145,19 @@ class CodeEditor(ZoomablePlainTextEdit):  # Erbt jetzt von ZoomablePlainTextEdit
         cursor.insertText(completion)
         self.setTextCursor(cursor)
 
-    def run_selected_code(self):
-        cursor = self.textCursor()
-        selected_text = cursor.selection().toPlainText()
-        if selected_text:
-            cleaned_code = self.clean_code(selected_text)
-            self.console.run_script(cleaned_code)
+    def run_script(self, script_path):
+        # Bestimme das Verzeichnis des Skripts
+        script_dir = os.path.dirname(os.path.abspath(script_path))
+        
+        # Ändere das aktuelle Arbeitsverzeichnis zu dem des Skripts
+        os.chdir(script_dir)
+        
+        # Führe das Skript aus
+        try:
+            subprocess.run([sys.executable, script_path], check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Fehler beim Ausführen des Skripts: {e}")
 
-    def clean_code(self, code):
-        code = re.sub(r'[^\x20-\x7E\n\t]', '', code)
-        return code.replace('\u2029', '\n').replace('\u2028', '\n')
+    def execute_current_file(self):
+        if self.current_file:
+            self.run_script(self.current_file)
