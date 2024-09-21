@@ -60,6 +60,12 @@ class Console(QMainWindow):
         menu = self.findChild(QMenu, menu_name)
         if menu:
             menu.addAction(action)
+
+    def remove_action_from_menu(self, menu_name, action):
+        menu = self.findChild(QMenu, menu_name)
+        if menu and action in menu.actions():
+            menu.removeAction(action)
+
     
     def initUI(self):
         self.setWindowTitle("Python IDE")
