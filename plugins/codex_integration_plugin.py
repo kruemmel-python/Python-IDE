@@ -58,10 +58,10 @@ class _CodexWorker(QRunnable):
             )
         except CodexAPIError as exc:
             LOGGER.warning("Codex request failed: %s", exc)
-            self.signals.failed.emit(str(exc))
+            self.signals.failed.emit(self, str(exc))
         except Exception as exc:  # pragma: no cover - defensive logging
             LOGGER.exception("Unexpected error while talking to Codex", exc_info=exc)
-            self.signals.failed.emit(str(exc))
+            self.signals.failed.emit(self, str(exc))
         else:
             if not isinstance(payload, dict):
                 payload = {"response": payload}
