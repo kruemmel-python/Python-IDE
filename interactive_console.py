@@ -3,8 +3,8 @@ import subprocess
 import logging
 import sys
 import io
-from PyQt5.QtWidgets import QPlainTextEdit, QWidget, QVBoxLayout, QLineEdit
-from PyQt5.QtCore import QProcess
+from PySide6.QtWidgets import QPlainTextEdit, QWidget, QVBoxLayout, QLineEdit
+from PySide6.QtCore import QProcess
 
 class InteractiveConsole(QWidget):
     def __init__(self, embedded_python_path, code_editor, console_output, project_dir):

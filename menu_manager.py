@@ -1,6 +1,7 @@
-from PyQt5.QtWidgets import QMenuBar, QAction, QMenu, QInputDialog, QListWidgetItem, QTextEdit, QMainWindow
-from PyQt5.QtGui import QKeySequence, QColor, QTextFormat, QTextCursor
-from PyQt5.QtCore import Qt
+from PySide6.QtWidgets import QMenuBar, QMenu, QInputDialog, QListWidgetItem, QTextEdit, QMainWindow
+from PySide6.QtGui import QAction
+from PySide6.QtGui import QKeySequence, QColor, QTextFormat, QTextCursor
+from PySide6.QtCore import Qt
 
 import info  # Importiere das info-Modul
 import shortcuts  # Importiere das shortcuts-Modul

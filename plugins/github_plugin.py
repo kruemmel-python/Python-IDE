@@ -1,9 +1,9 @@
 import os
 import requests
-from PyQt5.QtWidgets import (
+from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QFileDialog, QMessageBox, QDockWidget
 )
-from PyQt5.QtCore import Qt
+from PySide6.QtCore import Qt
 from plugin_interface import PluginInterface
 
 class GitHubPlugin(PluginInterface):

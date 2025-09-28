@@ -1,7 +1,8 @@
 # plugins/refactor_plugin.py
 
 from plugin_interface import PluginInterface
-from PyQt5.QtWidgets import QAction, QInputDialog
+from PySide6.QtWidgets import QInputDialog
+from PySide6.QtGui import QAction
 
 class RefactorPlugin(PluginInterface):
     def __init__(self, ide):

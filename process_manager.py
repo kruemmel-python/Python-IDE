@@ -2,7 +2,7 @@ import subprocess
 import logging
 import os
 import sys
-from PyQt5.QtWidgets import QInputDialog
+from PySide6.QtWidgets import QInputDialog
 
 def run_script(console, script):
     logging.debug("run_script gestartet")

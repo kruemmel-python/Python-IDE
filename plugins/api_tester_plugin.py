@@ -1,9 +1,9 @@
 import requests
 import json
-from PyQt5.QtWidgets import (
+from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QLabel, QLineEdit, QTextEdit, QPushButton, QDockWidget, QComboBox, QHBoxLayout, QMessageBox
 )
-from PyQt5.QtCore import Qt
+from PySide6.QtCore import Qt
 from plugin_interface import PluginInterface
 
 class ApiTesterPlugin(PluginInterface):

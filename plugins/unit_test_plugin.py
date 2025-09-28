@@ -1,10 +1,10 @@
 import os
 import subprocess
 import sys
-from PyQt5.QtWidgets import (
+from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QLabel, QPushButton, QFileDialog, QMessageBox, QDockWidget, QListWidget
 )
-from PyQt5.QtCore import Qt, QProcess
+from PySide6.QtCore import Qt, QProcess
 from plugin_interface import PluginInterface
 
 class UnitTestPlugin(PluginInterface):

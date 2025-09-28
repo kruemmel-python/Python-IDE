@@ -1,17 +1,24 @@
+"""Custom code editor widget used by the IDE."""
+from __future__ import annotations
+
+import logging
 import os
-import sqlite3
-from PyQt5.QtWidgets import QTextEdit, QCompleter, QMenu
-from PyQt5.QtGui import QColor, QTextFormat, QTextCursor, QPainter
-from PyQt5.QtCore import Qt, QRect
-import jedi
-from highlighter import PythonHighlighter
-from line_number_area import LineNumberArea
-from doc_widget import DocWidget
-from zoomable_widget import ZoomablePlainTextEdit
-import re
 import subprocess
 import sys
-import io
+from typing import Optional
+
+import jedi
+from PySide6.QtCore import QRect, Qt
+from PySide6.QtGui import QColor, QPainter, QTextCursor, QTextFormat
+from PySide6.QtWidgets import QCompleter, QMenu, QTextEdit
+
+from doc_widget import DocWidget
+from highlighter import PythonHighlighter
+from line_number_area import LineNumberArea
+from zoomable_widget import ZoomablePlainTextEdit
+
+LOGGER = logging.getLogger(__name__)
+
 
 class CodeEditor(ZoomablePlainTextEdit):
     def __init__(self, console=None, parent=None):
@@ -23,12 +30,12 @@ class CodeEditor(ZoomablePlainTextEdit):
         self.cursorPositionChanged.connect(self.highlightCurrentLine)
         self.updateLineNumberAreaWidth(0)
         self.highlighter = PythonHighlighter(self.document())
-        self.current_file = None
+        self.current_file: Optional[str] = None
 
         self.textChanged.connect(self.update_todo_list)
-        self.completer = None
-        self.completions = []
-        self.doc_widget = None
+        self.completer: Optional[QCompleter] = None
+        self.completions: list[str] = []
+        self.doc_widget: Optional[DocWidget] = None
 
         self.setMouseTracking(True)
 
@@ -38,7 +45,7 @@ class CodeEditor(ZoomablePlainTextEdit):
         while max_num >= 10:
             max_num //= 10
             digits += 1
-        space = 3 + self.fontMetrics().horizontalAdvance('9') * digits
+        space = 3 + self.fontMetrics().horizontalAdvance("9") * digits
         return space
 
     def updateLineNumberAreaWidth(self, _):
@@ -52,12 +59,14 @@ class CodeEditor(ZoomablePlainTextEdit):
         if rect.contains(self.viewport().rect()):
             self.updateLineNumberAreaWidth(0)
 
-    def resizeEvent(self, event):
+    def resizeEvent(self, event):  # noqa: N802 - Qt API compatibility
         super().resizeEvent(event)
         cr = self.contentsRect()
-        self.lineNumberArea.setGeometry(QRect(cr.left(), cr.top(), self.lineNumberAreaWidth(), cr.height()))
+        self.lineNumberArea.setGeometry(
+            QRect(cr.left(), cr.top(), self.lineNumberAreaWidth(), cr.height())
+        )
 
-    def lineNumberAreaPaintEvent(self, event):
+    def lineNumberAreaPaintEvent(self, event):  # noqa: N802 - Qt API compatibility
         painter = QPainter(self.lineNumberArea)
         painter.fillRect(event.rect(), Qt.lightGray)
         block = self.firstVisibleBlock()
@@ -68,13 +77,17 @@ class CodeEditor(ZoomablePlainTextEdit):
             if block.isVisible() and bottom >= event.rect().top():
                 number = str(blockNumber + 1)
                 painter.setPen(Qt.black)
-                painter.drawText(QRect(0, top, self.lineNumberArea.width(), self.fontMetrics().height()), Qt.AlignRight, number)
+                painter.drawText(
+                    QRect(0, top, self.lineNumberArea.width(), self.fontMetrics().height()),
+                    Qt.AlignRight,
+                    number,
+                )
             block = block.next()
             top = bottom
             bottom = top + int(self.blockBoundingRect(block).height())
             blockNumber += 1
 
-    def highlightCurrentLine(self):
+    def highlightCurrentLine(self):  # noqa: N802 - Qt API compatibility
         extraSelections = []
         if not self.isReadOnly():
             selection = QTextEdit.ExtraSelection()
@@ -87,20 +100,19 @@ class CodeEditor(ZoomablePlainTextEdit):
         self.setExtraSelections(extraSelections)
 
     def update_todo_list(self):
-        if hasattr(self.console, 'update_todo_list'):
+        if hasattr(self.console, "update_todo_list"):
             self.console.update_todo_list()
 
-    def keyPressEvent(self, event):
+    def keyPressEvent(self, event):  # noqa: N802 - Qt API compatibility
         if self.completer and self.completer.popup().isVisible():
             if event.key() in (Qt.Key_Enter, Qt.Key_Return, Qt.Key_Tab):
                 self.insert_completion(self.completer.currentCompletion())
                 return
-            elif event.key() == Qt.Key_Escape:
+            if event.key() == Qt.Key_Escape:
                 self.completer.popup().hide()
                 return
-            else:
-                super().keyPressEvent(event)
-                return
+            super().keyPressEvent(event)
+            return
 
         super().keyPressEvent(event)
 
@@ -132,11 +144,13 @@ class CodeEditor(ZoomablePlainTextEdit):
                 self.completer.activated.connect(self.insert_completion)
 
                 cursor_rect = self.cursorRect()
-                cursor_rect.setWidth(self.completer.popup().sizeHintForColumn(0)
-                                     + self.completer.popup().verticalScrollBar().sizeHint().width())
+                cursor_rect.setWidth(
+                    self.completer.popup().sizeHintForColumn(0)
+                    + self.completer.popup().verticalScrollBar().sizeHint().width()
+                )
                 self.completer.complete(cursor_rect)
-        except Exception as e:
-            print(f"Error getting completions: {e}")
+        except Exception as exc:  # pragma: no cover - defensive logging
+            LOGGER.exception("Error getting completions", exc_info=exc)
 
     def insert_completion(self, completion):
         if self.completer.widget() != self:
@@ -146,21 +160,31 @@ class CodeEditor(ZoomablePlainTextEdit):
         cursor.insertText(completion)
         self.setTextCursor(cursor)
 
-    def run_script(self, script_path):
-        # Bestimme das Verzeichnis des Skripts
+    def run_script(self, script_path: str) -> None:
         script_dir = os.path.dirname(os.path.abspath(script_path))
-        
-        # Setze das Arbeitsverzeichnis auf das Verzeichnis des Skripts
-        os.chdir(script_dir)
-        
-        # Setze die Standardausgabe auf UTF-8
-        sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding='utf-8')
-        
-        # Führe das Skript aus
+        LOGGER.info("Running script %s", script_path)
         try:
-            subprocess.run([sys.executable, script_path], check=True)
-        except subprocess.CalledProcessError as e:
-            print(f"Fehler beim Ausführen des Skripts: {e}")
+            result = subprocess.run(
+                [sys.executable, script_path],
+                cwd=script_dir,
+                capture_output=True,
+                check=True,
+                text=True,
+            )
+        except subprocess.CalledProcessError as exc:
+            LOGGER.error("Script execution failed", exc_info=exc)
+            self._write_to_console(exc.stdout, exc.stderr)
+            return
+
+        self._write_to_console(result.stdout, result.stderr)
+
+    def _write_to_console(self, stdout: Optional[str], stderr: Optional[str]) -> None:
+        if not self.console or not hasattr(self.console, "console_output"):
+            return
+        if stdout:
+            self.console.console_output.appendPlainText(stdout)
+        if stderr:
+            self.console.console_output.appendPlainText(stderr)
 
     def execute_current_file(self):
         if self.current_file:

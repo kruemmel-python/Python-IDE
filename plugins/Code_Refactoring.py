@@ -1,5 +1,5 @@
 from plugin_interface import PluginInterface
-from PyQt5.QtWidgets import QInputDialog  # Hinzufügen des Imports
+from PySide6.QtWidgets import QInputDialog  # Hinzufügen des Imports
 import logging
 
 class RefactorPlugin(PluginInterface):

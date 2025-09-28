@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import QWidget
-from PyQt5.QtCore import QSize, QRect, Qt
-from PyQt5.QtGui import QPainter
+from PySide6.QtWidgets import QWidget
+from PySide6.QtCore import QSize, QRect, Qt
+from PySide6.QtGui import QPainter
 
 class LineNumberArea(QWidget):
     def __init__(self, editor):

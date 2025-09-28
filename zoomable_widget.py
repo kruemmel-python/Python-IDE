@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import QPlainTextEdit
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QWheelEvent, QFont
+from PySide6.QtWidgets import QPlainTextEdit
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QWheelEvent, QFont
 
 class ZoomablePlainTextEdit(QPlainTextEdit):
     def __init__(self, parent=None):

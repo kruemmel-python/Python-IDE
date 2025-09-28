@@ -1,19 +1,36 @@
+"""High level file system helpers used by the console UI."""
+
 import os
-import sys
 import shutil
 import subprocess
-from PyQt5.QtWidgets import QFileDialog, QInputDialog
+import sys
+from pathlib import Path
+
+from PySide6.QtWidgets import QFileDialog, QInputDialog
+
+
+def _set_project_directory(console, project_dir: str) -> None:
+    """Update the project related widgets and state for the given directory."""
+    project_path = Path(project_dir)
+    console.project_dir = str(project_path)
+    if console.project_dir not in sys.path:
+        sys.path.insert(0, console.project_dir)
+
+    console.file_system_model.setRootPath(console.project_dir)
+    console.project_files.setRootIndex(console.file_system_model.index(console.project_dir))
+
+    # Aktualisiere auch den Arbeitsordner der interaktiven Konsole
+    if hasattr(console, "interactive_console"):
+        console.interactive_console.project_dir = console.project_dir
+
 
 def open_project(console):
     project_dir = QFileDialog.getExistingDirectory(console, 'Open Project', os.getcwd())
     if project_dir:
-        console.project_files.clear()
-        sys.path.insert(0, project_dir)
-        for root, _, files in os.walk(project_dir):
-            for file in files:
-                if file.endswith('.py'):
-                    file_path = os.path.join(root, file)
-                    console.project_files.addItem(file_path)
+        _set_project_directory(console, project_dir)
+        console.console_output.appendPlainText(f"Projekt geöffnet: {project_dir}")
+        return True
+    return False
 
 def new_project(console):
     project_dir = QFileDialog.getExistingDirectory(console, 'Select Directory for New Project', os.getcwd())
@@ -27,10 +44,11 @@ def new_project(console):
                 # Optional: Grundlegende Projektstruktur anlegen
                 with open(os.path.join(new_project_path, 'main.py'), 'w', encoding='utf-8') as main_file:
                     main_file.write("# Start your new project here\n")
-                console.project_files.clear()
-                console.project_files.addItem(os.path.join(new_project_path, 'main.py'))
+                _set_project_directory(console, new_project_path)
+                return True
             except Exception as e:
                 console.console_output.appendPlainText(f"Failed to create new project: {str(e)}")
+    return False
 
 def create_new_file(console):
     if console.project_files.currentIndex().isValid():
@@ -40,7 +58,7 @@ def create_new_file(console):
         else:
             directory = os.path.dirname(current_path)
     else:
-        directory = os.getcwd()
+        directory = console.project_dir if console.project_dir else os.getcwd()
 
     file_name, ok = QInputDialog.getText(console, 'New File', 'Bitte geben Sie den Namen der neuen Datei ein:')
     if ok and file_name:
@@ -61,7 +79,7 @@ def create_new_folder(console):
         else:
             directory = os.path.dirname(current_path)
     else:
-        directory = os.getcwd()
+        directory = console.project_dir if console.project_dir else os.getcwd()
 
     folder_name, ok = QInputDialog.getText(console, 'Neuer Ordner', 'Bitte geben Sie den Namen des neuen Ordners ein:')
     if ok and folder_name:
