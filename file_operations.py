@@ -1,22 +1,27 @@
+"""High level file system helpers used by the console UI."""
+
 import os
-import sys
 import shutil
 import subprocess
+import sys
+from pathlib import Path
+
 from PySide6.QtWidgets import QFileDialog, QInputDialog
 
 
-def _set_project_directory(console, project_dir):
+def _set_project_directory(console, project_dir: str) -> None:
     """Update the project related widgets and state for the given directory."""
-    console.project_dir = project_dir
-    if project_dir not in sys.path:
-        sys.path.insert(0, project_dir)
+    project_path = Path(project_dir)
+    console.project_dir = str(project_path)
+    if console.project_dir not in sys.path:
+        sys.path.insert(0, console.project_dir)
 
-    console.file_system_model.setRootPath(project_dir)
-    console.project_files.setRootIndex(console.file_system_model.index(project_dir))
+    console.file_system_model.setRootPath(console.project_dir)
+    console.project_files.setRootIndex(console.file_system_model.index(console.project_dir))
 
     # Aktualisiere auch den Arbeitsordner der interaktiven Konsole
     if hasattr(console, "interactive_console"):
-        console.interactive_console.project_dir = project_dir
+        console.interactive_console.project_dir = console.project_dir
 
 
 def open_project(console):
