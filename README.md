@@ -11,6 +11,7 @@ Willkommen zur **Python IDE**, einer benutzerfreundlichen integrierten Entwicklu
 ## Aktuelle Änderungen
 - PySide6 als freie GUI-Bibliothek integriert
 - Bekannte Probleme behoben
+- chatgpt.com Codex zur automatisierten Projektgenerierung integriert
 
 ## **Einleitung**
 Diese Anleitung dient dazu, neuen Benutzern den Einstieg in die Nutzung unserer vielseitigen Python-IDE zu erleichtern. Sie bietet einen Überblick über die Hauptfunktionen und erklärt, wie man die IDE effektiv einsetzt.
@@ -85,6 +86,9 @@ Diese Anleitung dient dazu, neuen Benutzern den Einstieg in die Nutzung unserer 
 
 ### **12. Unit-Tests**
 - **Testing**: Erstelle und führe Unit-Tests aus mit `unit_test_plugin`.
+
+### **13. Codex-Assistent**
+- **Automatisierung**: Erstelle neue Projekte oder lasse bestehende Strukturen über den Codex-Plugin-Dock automatisiert anpassen.
 
 ## **Schritt-für-Schritt-Anleitung**
 ### **1. Starten der IDE**
