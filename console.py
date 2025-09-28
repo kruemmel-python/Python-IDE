@@ -2,7 +2,25 @@ import os
 import sys
 import json
 import subprocess
-from PySide6.QtWidgets import QMainWindow, QVBoxLayout, QPlainTextEdit, QMenuBar, QWidget, QListWidget, QFileDialog, QMenu, QMessageBox, QDockWidget, QInputDialog, QTreeView, QFileSystemModel, QListWidgetItem, QTextEdit, QApplication
+from PySide6.QtWidgets import (
+    QApplication,
+    QDialog,
+    QDockWidget,
+    QFileDialog,
+    QFileSystemModel,
+    QInputDialog,
+    QListWidget,
+    QListWidgetItem,
+    QMainWindow,
+    QMenu,
+    QMenuBar,
+    QMessageBox,
+    QPlainTextEdit,
+    QTextEdit,
+    QTreeView,
+    QVBoxLayout,
+    QWidget,
+)
 from PySide6.QtGui import QAction
 from PySide6.QtCore import Qt, QModelIndex
 from PySide6.QtGui import QPalette, QColor, QTextFormat, QTextCursor, QKeySequence, QClipboard
@@ -382,7 +400,7 @@ class Console(QMainWindow):
         self.save_previous_settings()  # Vorherige Einstellungen speichern
         dialog = SettingsDialog(self)
         dialog.load_current_settings(self.current_settings())  # Aktuelle Einstellungen laden
-        if dialog.exec() == dialog.Rejected:
+        if dialog.exec() == QDialog.DialogCode.Rejected:
             self.restore_previous_settings()  # Vorherige Einstellungen wiederherstellen, wenn das Dialogfeld abgebrochen wird
 
     def current_settings(self):
