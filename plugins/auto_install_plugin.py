@@ -1,15 +1,15 @@
 import subprocess
 import requests
-from PyQt5.QtWidgets import (
-    QAction, QListWidget, QListWidgetItem, QVBoxLayout, QWidget, QMenu, QMessageBox, QInputDialog, QDockWidget, QLineEdit, QTextEdit, QSplitter
+from PySide6.QtWidgets import (
+    QListWidget, QListWidgetItem, QVBoxLayout, QWidget, QMenu, QMessageBox, QInputDialog, QDockWidget, QLineEdit, QTextEdit, QSplitter
 )
-from PyQt5.QtCore import Qt, QThread, pyqtSignal
-from PyQt5.QtGui import QPalette, QColor
+from PySide6.QtCore import Qt, QThread, Signal
+from PySide6.QtGui import QAction, QPalette, QColor
 from plugin_interface import PluginInterface
 from bs4 import BeautifulSoup
 
 class FetchLibrariesThread(QThread):
-    libraries_fetched = pyqtSignal(list)
+    libraries_fetched = Signal(list)
 
     def run(self):
         try:
@@ -145,7 +145,7 @@ class AutoInstallPlugin(PluginInterface):
         if selected_item:
             update_action.triggered.connect(lambda: self.update_package(selected_item.text()))
             uninstall_action.triggered.connect(lambda: self.uninstall_package(selected_item.text()))
-        menu.exec_(self.installed_library_list.viewport().mapToGlobal(position))
+        menu.exec(self.installed_library_list.viewport().mapToGlobal(position))
 
     def open_available_context_menu(self, position):
         menu = QMenu()
@@ -154,7 +154,7 @@ class AutoInstallPlugin(PluginInterface):
         menu.addAction(install_action)
         if selected_item:
             install_action.triggered.connect(lambda: self.install_package(selected_item.text()))
-        menu.exec_(self.available_library_list.viewport().mapToGlobal(position))
+        menu.exec(self.available_library_list.viewport().mapToGlobal(position))
 
     def install_package(self, package_name=None):
         if not package_name:

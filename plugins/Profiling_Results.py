@@ -1,6 +1,7 @@
 from plugin_interface import PluginInterface
-from PyQt5.QtWidgets import QDockWidget, QPlainTextEdit, QAction, QMenu
-from PyQt5.QtCore import Qt
+from PySide6.QtWidgets import QDockWidget, QPlainTextEdit, QMenu
+from PySide6.QtGui import QAction
+from PySide6.QtCore import Qt
 import cProfile
 import pstats
 import io

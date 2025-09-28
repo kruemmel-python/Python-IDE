@@ -1,6 +1,6 @@
 # plugins/debugger_plugin.py
 from plugin_interface import PluginInterface
-from PyQt5.QtWidgets import QAction
+from PySide6.QtGui import QAction
 import subprocess
 
 class DebuggerPlugin(PluginInterface):

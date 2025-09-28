@@ -27,7 +27,7 @@ Erstellen Sie eine neue Datei im `plugins`-Ordner, z.B. `unit_test_plugin.py`:
 ```python
 # unit_test_plugin.py
 from plugin_interface import PluginInterface
-from PyQt5.QtWidgets import QAction
+from PySide6.QtGui import QAction
 import subprocess
 
 class UnitTestPlugin(PluginInterface):
@@ -412,7 +412,7 @@ class Console(QMainWindow):
         self.console_output.appendPlainText(f"Debugger PID: {debugger_process.pid}")
 
 if __name__ == '__main__':
-    from PyQt5.QtWidgets import QApplication
+    from PySide6.QtWidgets import QApplication
     import sys
     app = QApplication(sys.argv)
     main_win = Console('path_to_embedded_python')

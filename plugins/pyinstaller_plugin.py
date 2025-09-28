@@ -1,9 +1,9 @@
 import os
 import subprocess
-from PyQt5.QtWidgets import (
+from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QCheckBox, QFileDialog, QMessageBox, QDockWidget
 )
-from PyQt5.QtCore import Qt
+from PySide6.QtCore import Qt
 from plugin_interface import PluginInterface
 
 class PyInstallerPlugin(PluginInterface):

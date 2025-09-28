@@ -1,5 +1,5 @@
 import subprocess
-from PyQt5.QtWidgets import QAction
+from PySide6.QtGui import QAction
 from plugin_interface import PluginInterface
 
 class CodeFormatterPlugin(PluginInterface):

@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMessageBox
+from PySide6.QtWidgets import QMessageBox
 
 def show_info():
     msg = QMessageBox()
@@ -15,4 +15,4 @@ def show_info():
         "Operatoren: Lila\n"
         "Klammern: Gelb"
     )
-    msg.exec_()
+    msg.exec()

@@ -2,8 +2,8 @@
 # Live_Code_Shelly.py
 
 from plugin_interface import PluginInterface
-from PyQt5.QtWidgets import QDockWidget, QPlainTextEdit
-from PyQt5.QtCore import Qt
+from PySide6.QtWidgets import QDockWidget, QPlainTextEdit
+from PySide6.QtCore import Qt
 import code
 import threading
 

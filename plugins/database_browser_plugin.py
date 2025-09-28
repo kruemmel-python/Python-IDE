@@ -1,8 +1,8 @@
 import sqlite3
-from PyQt5.QtWidgets import (
+from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QTextEdit, QFileDialog, QDockWidget, QTableWidget, QTableWidgetItem, QMessageBox, QDialog, QListWidget
 )
-from PyQt5.QtCore import Qt
+from PySide6.QtCore import Qt
 from plugin_interface import PluginInterface
 
 class DatabaseBrowserPlugin(PluginInterface):
@@ -101,7 +101,7 @@ class DatabaseBrowserPlugin(PluginInterface):
             query_list.addItem(query)
         layout.addWidget(query_list)
         dialog.setLayout(layout)
-        dialog.exec_()
+        dialog.exec()
 
     def show_all_data(self):
         db_path = self.db_path_input.text()
@@ -143,7 +143,7 @@ class DatabaseBrowserPlugin(PluginInterface):
                 layout.addWidget(table_widget)
 
             dialog.setLayout(layout)
-            dialog.exec_()
+            dialog.exec()
             conn.close()
         except sqlite3.Error as e:
             QMessageBox.critical(self.widget, "Datenbankfehler", str(e))

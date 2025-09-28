@@ -16,7 +16,7 @@ Entwicklung einer benutzerfreundlichen Python-IDE, die grundlegende und erweiter
   - Einrichtung des Projektverzeichnisses
   - Erstellung einer README.md mit Projektbeschreibung
 - **Einarbeitung in die verwendeten Technologien und Nutzung der KI (1 Woche)**
-  - Grundlegendes Verständnis von PyQt5
+  - Grundlegendes Verständnis von PySide6
   - Einführung in Jedi für Code-Vervollständigung
   - Lernen, wie die KI für spezifische Programmierfragen genutzt werden kann
 
@@ -69,10 +69,10 @@ Entwicklung einer benutzerfreundlichen Python-IDE, die grundlegende und erweiter
 - **Ende Woche 14**: Erstellung von ausführbaren Dateien, Fehlerbehebung, Optimierung, Fertigstellung der Dokumentation und Präsentation des Projekts
 
 ## Benötigte Ressourcen
-- **Software**: Python 3.x, PyQt5, Jedi, PyInstaller
+- **Software**: Python 3.x, PySide6, Jedi, PyInstaller
 - **Hardware**: Computer mit einem Betriebssystem, das Python und die oben genannten Bibliotheken unterstützt
-- **Dokumentation**: Zugriff auf PyQt5-, Jedi- und PyInstaller-Dokumentation
-- **Online-Ressourcen**: Tutorials und Beispiele für die Arbeit mit PyQt5 und Jedi
+- **Dokumentation**: Zugriff auf PySide6-, Jedi- und PyInstaller-Dokumentation
+- **Online-Ressourcen**: Tutorials und Beispiele für die Arbeit mit PySide6 und Jedi
 - **KI-Zugang**: Zugriff auf ChatGPT oder eine ähnliche KI für Unterstützung
 
 ## Risikomanagement
@@ -86,4 +86,4 @@ Entwicklung einer benutzerfreundlichen Python-IDE, die grundlegende und erweiter
   - Lösung: Nutzung der KI zur Verbesserung und Klärung der Dokumentation.
 
 ## Zusammenfassung
-Dieses Projekt bietet eine umfassende Einführung in die Entwicklung einer Python-IDE mit PyQt5 und Jedi. Durch die Nutzung einer KI wie ChatGPT können Schüler effizienter arbeiten und schnell auf Probleme und Fragen reagieren. Die geschätzte Dauer von 3-6 Monaten ermöglicht es den Schülern, die notwendigen Fähigkeiten zu entwickeln und das Projekt erfolgreich abzuschließen.
+Dieses Projekt bietet eine umfassende Einführung in die Entwicklung einer Python-IDE mit PySide6 und Jedi. Durch die Nutzung einer KI wie ChatGPT können Schüler effizienter arbeiten und schnell auf Probleme und Fragen reagieren. Die geschätzte Dauer von 3-6 Monaten ermöglicht es den Schülern, die notwendigen Fähigkeiten zu entwickeln und das Projekt erfolgreich abzuschließen.

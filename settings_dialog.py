@@ -1,7 +1,7 @@
-from PyQt5.QtWidgets import (
+from PySide6.QtWidgets import (
     QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton, QColorDialog, QFontDialog, QScrollArea, QWidget
 )
-from PyQt5.QtGui import QFont
+from PySide6.QtGui import QFont
 
 class SettingsDialog(QDialog):
     def __init__(self, parent=None):

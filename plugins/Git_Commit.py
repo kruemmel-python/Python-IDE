@@ -1,5 +1,6 @@
 import subprocess
-from PyQt5.QtWidgets import QAction, QInputDialog
+from PySide6.QtWidgets import QInputDialog
+from PySide6.QtGui import QAction
 from plugin_interface import PluginInterface
 
 class VersionControlPlugin(PluginInterface):

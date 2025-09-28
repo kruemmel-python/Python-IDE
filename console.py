@@ -2,9 +2,10 @@ import os
 import sys
 import json
 import subprocess
-from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QPlainTextEdit, QMenuBar, QAction, QWidget, QListWidget, QFileDialog, QMenu, QMessageBox, QDockWidget, QInputDialog, QTreeView, QFileSystemModel, QListWidgetItem, QTextEdit, QApplication
-from PyQt5.QtCore import Qt, QModelIndex
-from PyQt5.QtGui import QPalette, QColor, QTextFormat, QTextCursor, QKeySequence, QClipboard
+from PySide6.QtWidgets import QMainWindow, QVBoxLayout, QPlainTextEdit, QMenuBar, QWidget, QListWidget, QFileDialog, QMenu, QMessageBox, QDockWidget, QInputDialog, QTreeView, QFileSystemModel, QListWidgetItem, QTextEdit, QApplication
+from PySide6.QtGui import QAction
+from PySide6.QtCore import Qt, QModelIndex
+from PySide6.QtGui import QPalette, QColor, QTextFormat, QTextCursor, QKeySequence, QClipboard
 import logging
 from pathlib import Path
 from layout import CustomPalette
@@ -12,7 +13,18 @@ from settings_dialog import SettingsDialog
 from code_editor import CodeEditor
 import info
 import shortcuts
-from file_operations import open_project, new_project, create_new_file, create_new_folder, delete_item, load_file, save_file, install_package, update_package, uninstall_package
+from file_operations import (
+    open_project as file_open_project,
+    new_project as file_new_project,
+    create_new_file,
+    create_new_folder,
+    delete_item,
+    load_file,
+    save_file,
+    install_package,
+    update_package,
+    uninstall_package,
+)
 from todo_list import update_todo_list, goto_todo
 from process_manager import create_exe
 from plugin_manager import PluginManager
@@ -137,17 +149,13 @@ class Console(QMainWindow):
 
     def open_project(self):
         logging.debug("Projekt wird geöffnet")
-        project_dir = QFileDialog.getExistingDirectory(self, 'Open Project', os.getcwd())
-        if project_dir:
-            self.file_system_model.setRootPath(project_dir)
-            self.project_files.setRootIndex(self.file_system_model.index(project_dir))
-            self.project_dir = project_dir
-            sys.path.insert(0, project_dir)
-            logging.debug(f"Projektverzeichnis gesetzt: {project_dir}")
+        if file_open_project(self):
+            logging.debug(f"Projektverzeichnis gesetzt: {self.project_dir}")
 
     def new_project(self):
         logging.debug("Neues Projekt wird erstellt")
-        new_project(self)
+        if file_new_project(self):
+            logging.debug(f"Neues Projekt erstellt: {self.project_dir}")
 
     def open_context_menu(self, position):
         index = self.project_files.indexAt(position)
@@ -156,7 +164,7 @@ class Console(QMainWindow):
             new_file_action = context_menu.addAction("New File")
             new_folder_action = context_menu.addAction("New Folder")
             delete_action = context_menu.addAction("Delete")
-            action = context_menu.exec_(self.project_files.viewport().mapToGlobal(position))
+            action = context_menu.exec(self.project_files.viewport().mapToGlobal(position))
 
             if action == new_file_action:
                 logging.debug("Neue Datei wird erstellt")
@@ -374,7 +382,7 @@ class Console(QMainWindow):
         self.save_previous_settings()  # Vorherige Einstellungen speichern
         dialog = SettingsDialog(self)
         dialog.load_current_settings(self.current_settings())  # Aktuelle Einstellungen laden
-        if dialog.exec_() == dialog.Rejected:
+        if dialog.exec() == dialog.Rejected:
             self.restore_previous_settings()  # Vorherige Einstellungen wiederherstellen, wenn das Dialogfeld abgebrochen wird
 
     def current_settings(self):
@@ -435,8 +443,8 @@ class Console(QMainWindow):
             QApplication.clipboard().setText(text)
 
 if __name__ == '__main__':
-    from PyQt5.QtWidgets import QApplication
+    from PySide6.QtWidgets import QApplication
     app = QApplication(sys.argv)
     main_win = Console('path_to_embedded_python')
     main_win.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

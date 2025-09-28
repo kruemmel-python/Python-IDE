@@ -8,6 +8,10 @@ Willkommen zur **Python IDE**, einer benutzerfreundlichen integrierten Entwicklu
 
 # **Python-IDE: Ein umfassender Leitfaden**
 
+## Aktuelle Änderungen
+- PySide6 als freie GUI-Bibliothek integriert
+- Bekannte Probleme behoben
+
 ## **Einleitung**
 Diese Anleitung dient dazu, neuen Benutzern den Einstieg in die Nutzung unserer vielseitigen Python-IDE zu erleichtern. Sie bietet einen Überblick über die Hauptfunktionen und erklärt, wie man die IDE effektiv einsetzt.
 

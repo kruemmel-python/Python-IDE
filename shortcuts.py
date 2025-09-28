@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel, QPushButton
+from PySide6.QtWidgets import QDialog, QVBoxLayout, QLabel, QPushButton
 
 class ShortcutsDialog(QDialog):
     def __init__(self):
@@ -39,4 +39,4 @@ class ShortcutsDialog(QDialog):
 
 def show_shortcuts():
     dialog = ShortcutsDialog()
-    dialog.exec_()
+    dialog.exec()
